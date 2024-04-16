@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../../data/model/trade_marketing_model.dart';
 import '../../../../core/constants.dart';
 import '../../Login/login_screen.dart';
 import '../../Signup/signup_screen.dart';
-import 'package:http/http.dart' as http;
 
 class LoginAndSignupBtn extends StatelessWidget {
   const LoginAndSignupBtn({

@@ -62,7 +62,7 @@ class TradeMarketingSection {
   List<TradeMarketingSubSection>? subSectionList;
   String? description;
   int file;
-  int order;
+  String order;
 
   TradeMarketingSection({
     this.id = 0,
@@ -70,7 +70,7 @@ class TradeMarketingSection {
     this.subSectionList,
     this.description,
     this.file = 0,
-    this.order = 0,
+    this.order = "0",
   });
 
   factory TradeMarketingSection.fromJson(Map<String, dynamic> json) {
@@ -82,7 +82,7 @@ class TradeMarketingSection {
               []),
       description: json['U_Descr'] ?? "",
       file: json['U_File'] ?? 0,
-      order: json['U_Order'] ?? 0,
+      order: json['U_Order'] ?? "0",
     );
   }
 }
@@ -121,7 +121,7 @@ class TradeMarketingForm {
   int docEntry;
   List<TradeMarketingQuestion>? questionList;
   int file;
-  int order;
+  String order;
   String? title;
   String? base64;
   String? url;
@@ -132,7 +132,7 @@ class TradeMarketingForm {
     this.docEntry = 0,
     this.questionList,
     this.file = 0,
-    this.order = 0,
+    this.order = "0",
     this.title,
     this.base64,
     this.url,
@@ -147,7 +147,7 @@ class TradeMarketingForm {
           json['Preguntas']?.map((x) => TradeMarketingQuestion.fromJson(x)) ??
               []),
       file: json['U_File'] ?? 0,
-      order: json['U_Order'] ?? 0,
+      order: json['U_Order'] ?? "0",
       title: json['U_Title'] ?? "",
       base64: json['Base64'] ?? "",
       url: json['Url'] ?? "",
@@ -161,7 +161,7 @@ class TradeMarketingQuestion {
   int docEntry;
   List<TradeMarketingAnswer>? answerList;
   String? description;
-  int order;
+  String order;
   int question;
   String? type;
   String? responsevalue;
@@ -174,7 +174,7 @@ class TradeMarketingQuestion {
     this.docEntry = 0,
     this.answerList,
     this.description,
-    this.order = 0,
+    this.order = "0",
     this.question = 0,
     this.type,
     this.responsevalue,
@@ -191,7 +191,7 @@ class TradeMarketingQuestion {
           json['Respuestas']?.map((x) => TradeMarketingAnswer.fromJson(x)) ??
               []),
       description: json['U_Descr'] ?? "",
-      order: json['U_Order'] ?? 0,
+      order: json['U_Order'] ?? "0",
       question: json['U_Question'] ?? 0,
       type: json['U_Type'] ?? "",
       responsevalue: json['U_Responsevalue'] ?? "",
@@ -206,14 +206,14 @@ class TradeMarketingAnswer {
   String? idDocument;
   String? order;
   String? answer;
-  bool responsevalue;
+  String? responsevalue;
 
   TradeMarketingAnswer({
     this.id = 0,
     this.idDocument,
     this.order,
     this.answer,
-    this.responsevalue = false,
+    this.responsevalue = "",
   });
 
   factory TradeMarketingAnswer.fromJson(Map<String, dynamic> json) {
@@ -222,7 +222,7 @@ class TradeMarketingAnswer {
       idDocument: json['IdDocument'] ?? "0",
       order: json['U_Order'] ?? "",
       answer: json['U_answer'] ?? "",
-      responsevalue: json['U_Responsevalue'] ?? false,
+      responsevalue: json['U_Responsevalue'] ?? "",
     );
   }
 }

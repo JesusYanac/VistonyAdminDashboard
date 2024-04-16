@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rive/rive.dart';
-import 'package:vistony_admin_dashboard/data/model/trade_marketing_model.dart';
-import 'package:vistony_admin_dashboard/generated/assets.dart';
 
+import '../../../../../data/model/trade_marketing_model.dart';
+import '../../../../../generated/assets.dart';
 import '../../../../core/constants.dart';
 import '../bloc/trade_marketing_bloc.dart';
 
 
 class RecentFiles extends StatefulWidget {
-  const RecentFiles({
-    super.key,
-  });
+  const RecentFiles({super.key, required this.callback});
+
+  final Function callback;
 
   @override
   State<RecentFiles> createState() => _RecentFilesState();
@@ -20,11 +20,11 @@ class RecentFiles extends StatefulWidget {
 
 class _RecentFilesState extends State<RecentFiles> {
   final List<String> headers = [
-    "",
     "Vendedor",
     "Cliente",
     "Fecha",
     "Dirección",
+    ""
   ];
   @override
   Widget build(BuildContext context) {
@@ -90,24 +90,30 @@ class _RecentFilesState extends State<RecentFiles> {
       ),
     );
   }
+  DataRow recentFileDataRow(TradeMarketingPageModel fileInfo) {
+    return DataRow(
+      cells: [
+        DataCell(Text("${fileInfo.cardName}",
+            maxLines: 2, overflow: TextOverflow.ellipsis)),
+
+        DataCell(Text("${fileInfo.cardName}",
+            maxLines: 2, overflow: TextOverflow.ellipsis)),
+        DataCell(Text(fileInfo.dateCreation!)),
+        DataCell(Text("${fileInfo.cardCode}",
+            maxLines: 2, overflow: TextOverflow.ellipsis)),
+        DataCell(SvgPicture.asset(
+          Assets.iconsDocFile,
+          height: 30,
+          width: 30,
+        )),
+      ],
+      onSelectChanged: (value) {
+        widget.callback(fileInfo.cardCode!);
+      },
+    );
+  }
 }
 
-DataRow recentFileDataRow(TradeMarketingPageModel fileInfo) {
-  return DataRow(
-    cells: [
-      DataCell(SvgPicture.asset(
-        Assets.iconsDocFile,
-        height: 30,
-        width: 30,
-      )),
-      DataCell(Text("${fileInfo.cardName}",
-          maxLines: 2, overflow: TextOverflow.ellipsis)),
 
-      DataCell(Text("${fileInfo.cardName}",
-          maxLines: 2, overflow: TextOverflow.ellipsis)),
-      DataCell(Text(fileInfo.dateCreation!)),
-      DataCell(Text("${fileInfo.cardCode}",
-          maxLines: 2, overflow: TextOverflow.ellipsis)),
-    ],
-  );
-}
+
+

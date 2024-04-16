@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:vistony_admin_dashboard/domain/usecases/usecase_trade_marketing.dart';
 
 import '../../../../../data/model/trade_marketing_model.dart';

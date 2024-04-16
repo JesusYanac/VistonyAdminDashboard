@@ -5,4 +5,8 @@ class UseCaseTradeMarketing {
   Future<TradeMarketingEntity?> getTradeMarketing()async{
     return await RepositoryTradeMarketingImpl().getTradeMarketing();
   }
+
+  Future<TradeMarketingPageModel?> getFormTradeMarketing() async{
+    return await RepositoryTradeMarketingImpl().getFormTradeMarketing();
+  }
 }

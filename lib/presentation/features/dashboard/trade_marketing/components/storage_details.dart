@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vistony_admin_dashboard/presentation/features/dashboard/bloc/navigation_bloc.dart';
 
-import '../../../../../generated/assets.dart';
 import '../../../../core/constants.dart';
 import 'chart.dart';
 import 'storage_info_card.dart';

@@ -6,13 +6,20 @@ import 'package:vistony_admin_dashboard/presentation/features/dashboard/trade_ma
 import '../../../core/constants.dart';
 import '../../../core/controllers/responsive.dart';
 
-import 'components/my_fields.dart';
+import 'bloc/form_trade_marketing_bloc.dart';
+import 'components/file_selected.dart';
 import 'components/recent_files.dart';
 import 'components/storage_details.dart';
 
-class TradeMarketingScreen extends StatelessWidget {
+class TradeMarketingScreen extends StatefulWidget {
   const TradeMarketingScreen({super.key});
 
+  @override
+  State<TradeMarketingScreen> createState() => _TradeMarketingScreenState();
+}
+
+class _TradeMarketingScreenState extends State<TradeMarketingScreen> {
+  String codeForm = "";
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -22,16 +29,34 @@ class TradeMarketingScreen extends StatelessWidget {
           flex: 5,
           child: Column(
             children: [
-              const MyFiles(),
-              const SizedBox(height: defaultPadding),
-              BlocProvider<TradeMarketingBloc>(
-                create: (context){
-                  final bloc = TradeMarketingBloc();
-                  bloc.reloadTradeMarketing();
-                  return bloc;
-                },
-                child: const RecentFiles(),
-              ),
+              //const MyFiles(),
+              //const SizedBox(height: defaultPadding),
+              if (codeForm == "")
+                BlocProvider<TradeMarketingBloc>(
+                  create: (context) {
+                    final bloc = TradeMarketingBloc();
+                    bloc.reloadTradeMarketing();
+                    return bloc;
+                  },
+                  child: RecentFiles(callback: (value){
+                    setState(() {
+                      codeForm = value;
+                    });
+                  }),
+                ),
+              if (codeForm != "")
+                BlocProvider<FormTradeMarketingBloc>(
+                  create: (context) {
+                    final bloc = FormTradeMarketingBloc();
+                    bloc.fetchFormTradeMarketing(codeForm);
+                    return bloc;
+                  },
+                  child: FileSelected(callback: (){
+                    setState(() {
+                      codeForm = "";
+                    });
+                  }),
+                ),
               if (Responsive.isMobile(context))
                 const SizedBox(height: defaultPadding),
               if (Responsive.isMobile(context)) const StorageDetails(),
@@ -50,5 +75,3 @@ class TradeMarketingScreen extends StatelessWidget {
     );
   }
 }
-
-
