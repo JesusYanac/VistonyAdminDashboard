@@ -8,7 +8,17 @@ class TradeMarketingBloc extends Bloc<TradeMarketingEvent, TradeMarketingState> 
   TradeMarketingBloc() : super(InitialTradeMarketingState([])) {
     on<ReloadTradeMarketing>((event, emit)async{
       emit(LoadingTradeMarketingState([]));
-      final TradeMarketingEntity? value = await UseCaseTradeMarketing().getTradeMarketing();
+      // Inicia un temporizador para asegurar un retraso mínimo de 2 segundos
+      final minimumDelayFuture = Future.delayed(const Duration(seconds: 2));
+
+      // Realiza la consulta a la API
+      final apiResponseFuture = UseCaseTradeMarketing().getTradeMarketing();
+
+      // Espera a que ambas tareas (retraso mínimo y respuesta de la API) se completen
+      await Future.wait([minimumDelayFuture, apiResponseFuture]);
+
+      // Obtiene el valor de la respuesta de la API
+      final TradeMarketingEntity? value = await apiResponseFuture;
       debugPrint("value: value.toString(): ${value?.data.toString()}");
       if(value != null && value.status != "N"){
         emit(SuccessTradeMarketingState(value.data));
