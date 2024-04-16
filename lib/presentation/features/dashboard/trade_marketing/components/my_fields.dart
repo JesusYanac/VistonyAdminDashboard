@@ -24,7 +24,7 @@ class _MyFilesState extends State<MyFiles> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "My Files",
+              "Estadísticas",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             /*ElevatedButton.icon(

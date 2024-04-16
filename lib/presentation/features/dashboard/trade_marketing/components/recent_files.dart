@@ -44,9 +44,9 @@ class _RecentFilesState extends State<RecentFiles> {
           BlocBuilder<TradeMarketingBloc, TradeMarketingState>(
             builder: (context, state) {
               if (state is SuccessTradeMarketingState) {
-                return Text("size: ${state.data?.length}");
+                return Text("Total: ${state.data?.length}");
               } else {
-                return const Text("size: 0");
+                return const Text("Total: 0");
               }
             },
           ),
