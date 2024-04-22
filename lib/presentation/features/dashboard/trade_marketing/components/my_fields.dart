@@ -27,18 +27,6 @@ class _MyFilesState extends State<MyFiles> {
               "Estadísticas",
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            /*ElevatedButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: defaultPadding * 1.5,
-                  vertical:
-                      defaultPadding / (Responsive.isMobile(context) ? 2 : 1),
-                ),
-              ),
-              onPressed: () {},
-              icon: const Icon(Icons.add),
-              label: const Text("Add New"),
-            ),*/
           ],
         ),
         const SizedBox(height: defaultPadding),

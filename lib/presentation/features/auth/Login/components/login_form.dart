@@ -7,6 +7,7 @@ import '../../../../core/constants.dart';
 import '../../../../core/controllers/menu_app_controller.dart';
 import '../../../dashboard/bloc/navigation_bloc.dart';
 import '../../../dashboard/main_screen.dart';
+import '../../../dashboard/trade_marketing/bloc/trade_marketing_bloc.dart';
 import '../../Signup/signup_screen.dart';
 
 
@@ -61,10 +62,21 @@ class LoginForm extends StatelessWidget {
                           create: (context) => MenuAppController(),
                         ),
                       ],
-                      child: BlocProvider(
-                        create: (context) => NavigationBloc(),
+                      child: MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => NavigationBloc(),
+                          ),
+                          BlocProvider(
+                            create: (context){
+                              final bloc = TradeMarketingBloc();
+                              bloc.reloadTradeMarketing();
+                              return bloc;
+                            },
+                          )
+                        ],
                         child: const MainScreen(),
-                      ) ,
+                      ),
                     );
                   },
                 ),
@@ -72,6 +84,7 @@ class LoginForm extends StatelessWidget {
             },
             child: Text(
               "Inicia Sesión".toUpperCase(),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           const SizedBox(height: defaultPadding),

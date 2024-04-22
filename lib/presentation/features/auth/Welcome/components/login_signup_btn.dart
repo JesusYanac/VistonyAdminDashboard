@@ -38,7 +38,8 @@ class LoginAndSignupBtn extends StatelessWidget {
           },
           child: Text(
             "Inicia Sesión".toUpperCase(),
-          ),
+            style: const TextStyle(color: Colors.white),
+          )
         ),
         const SizedBox(height: 16),
         ElevatedButton(

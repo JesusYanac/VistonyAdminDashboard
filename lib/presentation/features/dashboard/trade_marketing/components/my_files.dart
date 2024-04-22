@@ -5,9 +5,7 @@ import '../../../../core/controllers/responsive.dart';
 import 'file_info_card.dart';
 
 class MyFiles extends StatelessWidget {
-  const MyFiles({
-    super.key,
-  });
+  const MyFiles({super.key});
 
   @override
   Widget build(BuildContext context) {

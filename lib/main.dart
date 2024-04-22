@@ -4,6 +4,8 @@ import 'presentation/core/constants.dart';
 import 'presentation/features/auth/Welcome/welcome_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 

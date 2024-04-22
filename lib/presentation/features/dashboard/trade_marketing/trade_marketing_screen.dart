@@ -1,27 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vistony_admin_dashboard/presentation/features/dashboard/trade_marketing/bloc/trade_marketing_bloc.dart';
-
-import '../../../core/constants.dart';
-import '../../../core/controllers/responsive.dart';
+import 'package:vistony_admin_dashboard/presentation/features/dashboard/bloc/navigation_bloc.dart';
 
 import 'bloc/form_trade_marketing_bloc.dart';
-import 'components/file_selected.dart';
+import 'bloc/trade_marketing_bloc.dart';
+import 'file_selected.dart';
 import 'components/recent_files.dart';
-import 'components/storage_details.dart';
 
 class TradeMarketingScreen extends StatefulWidget {
   const TradeMarketingScreen({super.key});
-
   @override
   State<TradeMarketingScreen> createState() => _TradeMarketingScreenState();
 }
 
 class _TradeMarketingScreenState extends State<TradeMarketingScreen> {
   String codeForm = "";
+  String vendorName = "";
+  String clientAddress = "";
   @override
   Widget build(BuildContext context) {
+    if (codeForm == "") {
+      BlocProvider.of<NavigationBloc>(context).updateSearchBoxVisibility(0, true);
+    }else{
+      BlocProvider.of<NavigationBloc>(context).updateSearchBoxVisibility(0, false);
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,18 +35,13 @@ class _TradeMarketingScreenState extends State<TradeMarketingScreen> {
               //const MyFiles(),
               //const SizedBox(height: defaultPadding),
               if (codeForm == "")
-                BlocProvider<TradeMarketingBloc>(
-                  create: (context) {
-                    final bloc = TradeMarketingBloc();
-                    bloc.reloadTradeMarketing();
-                    return bloc;
-                  },
-                  child: RecentFiles(callback: (value){
-                    setState(() {
-                      codeForm = value;
-                    });
-                  }),
-                ),
+                RecentFiles(callback: (code, vendor, address){
+                  setState(() {
+                    codeForm = code;
+                    vendorName = vendor;
+                    clientAddress = address;
+                  });
+                }),
               if (codeForm != "")
                 BlocProvider<FormTradeMarketingBloc>(
                   create: (context) {
@@ -55,22 +53,24 @@ class _TradeMarketingScreenState extends State<TradeMarketingScreen> {
                     setState(() {
                       codeForm = "";
                     });
-                  }),
+                  },
+                  vendorName: vendorName,
+                  clientAddress: clientAddress,),
                 ),
-              if (Responsive.isMobile(context))
+              /*if (Responsive.isMobile(context))
                 const SizedBox(height: defaultPadding),
-              if (Responsive.isMobile(context)) const StorageDetails(),
+              if (Responsive.isMobile(context)) const StorageDetails(),*/
             ],
           ),
         ),
-        if (!Responsive.isMobile(context))
+        /*if (!Responsive.isMobile(context))
           const SizedBox(width: defaultPadding),
         // On Mobile means if the screen is less than 850 we don't want to show it
         if (!Responsive.isMobile(context))
           const Expanded(
             flex: 2,
             child: StorageDetails(),
-          ),
+          ),*/
       ],
     );
   }

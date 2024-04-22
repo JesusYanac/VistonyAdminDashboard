@@ -39,5 +39,6 @@ class Assets {
   static const String imagesSignupTop = 'assets/images/signup_top.png';
   static const String riveAnimationsAlien404Screen = 'assets/riveAnimations/alien_404_screen.riv';
   static const String riveAnimationsEparLoading = 'assets/riveAnimations/epar_loading.riv';
+  static const String riveAnimationsOnConsctruction = 'assets/riveAnimations/on_consctruction.riv';
 
 }

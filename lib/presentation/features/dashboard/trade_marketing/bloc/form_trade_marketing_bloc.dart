@@ -1,17 +1,26 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vistony_admin_dashboard/domain/usecases/usecase_trade_marketing.dart';
 
 import '../../../../../data/model/trade_marketing_model.dart';
+import '../../../../../domain/usecases/usecase_trade_marketing.dart';
 
 class FormTradeMarketingBloc extends Bloc<FormTradeMarketingEvent, FormTradeMarketingState> {
   FormTradeMarketingBloc() : super(InitialFormTradeMarketingState(null)) {
     on<FetchFormTradeMarketing>((event, emit)async{
       emit(LoadingFormTradeMarketingState(null));
-      final TradeMarketingPageModel? value = await UseCaseTradeMarketing().getFormTradeMarketing();
-      debugPrint("value: value.toString(): ${value?.toString()}");
+      // Inicia un temporizador para asegurar un retraso mínimo de 2 segundos
+      final minimumDelayFuture = Future.delayed(const Duration(seconds: 1));
+
+      // Realiza la consulta a la API
+      final apiResponseFuture = UseCaseTradeMarketing().getFormTradeMarketing();
+
+      // Espera a que ambas tareas (retraso mínimo y respuesta de la API) se completen
+      await Future.wait([minimumDelayFuture, apiResponseFuture]);
+
+      // Obtiene el valor de la respuesta de la API
+      final TradeMarketingPageModel? value = await apiResponseFuture;
       if(value != null){
-        emit(ErrorFormTradeMarketingState(value));
+        emit(SuccessFormTradeMarketingState(value));
       }else{
         emit(ErrorFormTradeMarketingState(null));
       }

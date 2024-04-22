@@ -7,9 +7,7 @@ import 'chart.dart';
 import 'storage_info_card.dart';
 
 class StorageDetails extends StatefulWidget {
-  const StorageDetails({
-    super.key,
-  });
+  const StorageDetails({super.key});
 
   @override
   State<StorageDetails> createState() => _StorageDetailsState();
@@ -30,7 +28,7 @@ class _StorageDetailsState extends State<StorageDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                state.title,
+                state.title.toUpperCase(),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,

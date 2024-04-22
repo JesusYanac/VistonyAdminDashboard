@@ -8,5 +8,6 @@ const bgColor = Color(0xFF212332);
 const defaultPadding = 16.0;
 
 
-const kPrimaryColor = Color.fromRGBO(52, 101, 171, 1.0);
+//const kPrimaryColor = Color.fromRGBO(52, 101, 171, 1.0);
+const kPrimaryColor = Color.fromRGBO(103, 80, 164, 1.0);
 const kPrimaryLightColor = Color(0xFFF1E6FF);

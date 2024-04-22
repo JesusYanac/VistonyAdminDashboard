@@ -13,26 +13,62 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     {"title": "Profile", "svgSrc": Assets.iconsMenuProfile, "index": 6},
     {"title": "Settings", "svgSrc": Assets.iconsMenuSetting, "index": 7},
   ];
-  NavigationBloc() : super(NavigationState(0)) {
-    on<ChangeScreen>((event, emit) => emit(NavigationState(event.index, titles[event.index]["title"], titles[event.index]["svgSrc"])));
+  NavigationBloc() : super(NavigationState(
+    title: "Trade Marketing",
+    svgSrc: Assets.iconsMenuDashboard,
+    index: 0,
+    isSearchBoxVisible: true
+  )) {
+    on<ChangeScreen>((event, emit) => emit(NavigationState(
+      index: event.index,
+      title: titles[event.index]["title"],
+      svgSrc: titles[event.index]["svgSrc"],
+      isSearchBoxVisible: event.isSearchBoxVisible
+    )));
+    on<UpdateSearchBoxVisibility>((event, emit) => emit(NavigationState(
+      index: event.index,
+      title: titles[event.index]["title"],
+      svgSrc: titles[event.index]["svgSrc"],
+      isSearchBoxVisible: event.isSearchBoxVisible
+    )));
   }
-  void changeScreen(int index) => add(ChangeScreen(index));
+  void changeScreen(int index) => add(ChangeScreen(
+    index: index,
+    isSearchBoxVisible: true
+  ));
+  void updateSearchBoxVisibility(int index, bool isVisible) => add(UpdateSearchBoxVisibility(
+    index: index,
+    isSearchBoxVisible: isVisible
+  ));
 
   List<Map<String, dynamic>> getTitles() => titles;
 }
 
 class NavigationEvent {
   int index;
-  NavigationEvent(this.index);
+  bool isSearchBoxVisible;
+  NavigationEvent({required this.index, required this.isSearchBoxVisible});
 }
 
 class ChangeScreen extends NavigationEvent {
-  ChangeScreen(super.index);
+
+  ChangeScreen({required super.index, required super.isSearchBoxVisible});
+}
+
+class UpdateSearchBoxVisibility extends NavigationEvent {
+  UpdateSearchBoxVisibility({required super.index, required super.isSearchBoxVisible});
 }
 
 class NavigationState {
   int index;
   String title;
   String svgSrc;
-  NavigationState(this.index, [this.title = "Trade Marketing", this.svgSrc = Assets.iconsMenuDashboard]);
+  bool isSearchBoxVisible;
+
+  NavigationState({
+    required this.index,
+    required this.title,
+    required this.svgSrc,
+    required this.isSearchBoxVisible
+  });
 }

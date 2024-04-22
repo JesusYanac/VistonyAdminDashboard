@@ -1,17 +1,51 @@
 class TradeMarketingEntity {
   String? status;
-  List<TradeMarketingPageModel>? data;
+  List<TradeMarketingHeader>? data;
 
   TradeMarketingEntity({this.status = "N", this.data});
 
   factory TradeMarketingEntity.fromJson(Map<String, dynamic> json) {
     return TradeMarketingEntity(
       status: json['status'] ?? "N",
-      data: List<TradeMarketingPageModel>.from(
-          json['Data']?.map((x) => TradeMarketingPageModel.fromJson(x)) ?? []),
+      data: List<TradeMarketingHeader>.from(
+          json['data']?.map((x) => TradeMarketingHeader.fromJson(x)) ?? []),
     );
   }
 }
+class TradeMarketingHeader {
+  final String docEntry;
+  final String cardCode;
+  final String cardName;
+  final String dateCreate;
+  final String direccion;
+  final String vendedor;
+
+  TradeMarketingHeader({
+    required this.docEntry,
+    required this.cardCode,
+    required this.cardName,
+    required this.dateCreate,
+    required this.direccion,
+    required this.vendedor,
+  });
+
+  factory TradeMarketingHeader.fromJson(Map<String, dynamic> json) {
+    return TradeMarketingHeader(
+      docEntry: json['DocEntry'],
+      cardCode: json['CardCode'],
+      cardName: json['CardName'],
+      dateCreate: json['DateCreate'],
+      direccion: json['Direccion'],
+      vendedor: json['Vendedor'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'TradeMarketingHeader{docEntry: $docEntry, cardCode: $cardCode, cardName: $cardName, dateCreate: $dateCreate, direccion: $direccion, vendedor: $vendedor}';
+  }
+}
+
 
 class TradeMarketingPageModel {
   int id;
@@ -54,6 +88,11 @@ class TradeMarketingPageModel {
       shipToCode: json['shipToCode'] ?? "",
     );
   }
+
+  @override
+  String toString() {
+    return 'TradeMarketingPageModel{id: $id, idDocument: $idDocument, chkrecibido: $chkrecibido, sectionList: $sectionList, dateCreation: $dateCreation, dateCompletion: $dateCompletion, imei: $imei, cardCode: $cardCode, cardName: $cardName, shipToCode: $shipToCode}';
+  }
 }
 
 class TradeMarketingSection {
@@ -85,6 +124,11 @@ class TradeMarketingSection {
       order: json['U_Order'] ?? "0",
     );
   }
+
+  @override
+  String toString() {
+    return 'TradeMarketingSection{id: $id, idDocument: $idDocument, subSectionList: $subSectionList, description: $description, file: $file, order: $order}';
+  }
 }
 
 class TradeMarketingSubSection {
@@ -112,6 +156,11 @@ class TradeMarketingSubSection {
               []),
       tituloSubSeccion: json['Titulo_SubSeccion'] ?? "",
     );
+  }
+
+  @override
+  String toString() {
+    return 'TradeMarketingSubSection{id: $id, idDocument: $idDocument, docEntry: $docEntry, formList: $formList, tituloSubSeccion: $tituloSubSeccion}';
   }
 }
 
@@ -152,6 +201,11 @@ class TradeMarketingForm {
       base64: json['Base64'] ?? "",
       url: json['Url'] ?? "",
     );
+  }
+
+  @override
+  String toString() {
+    return 'TradeMarketingForm{id: $id, idDocument: $idDocument, docEntry: $docEntry, questionList: $questionList, file: $file, order: $order, title: $title, base64: $base64, url: $url}';
   }
 }
 
@@ -199,6 +253,11 @@ class TradeMarketingQuestion {
       url: json['Url'] ?? "",
     );
   }
+
+  @override
+  String toString() {
+    return 'TradeMarketingQuestion{id: $id, idDocument: $idDocument, docEntry: $docEntry, answerList: $answerList, description: $description, order: $order, question: $question, type: $type, responsevalue: $responsevalue, base64: $base64, url: $url}';
+  }
 }
 
 class TradeMarketingAnswer {
@@ -224,5 +283,10 @@ class TradeMarketingAnswer {
       answer: json['U_answer'] ?? "",
       responsevalue: json['U_Responsevalue'] ?? "",
     );
+  }
+
+  @override
+  String toString() {
+    return 'TradeMarketingAnswer{id: $id, idDocument: $idDocument, order: $order, answer: $answer, responsevalue: $responsevalue}';
   }
 }

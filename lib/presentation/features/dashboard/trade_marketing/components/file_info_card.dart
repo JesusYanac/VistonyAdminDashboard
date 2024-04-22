@@ -4,12 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../domain/models/my_files.dart';
 import '../../../../core/constants.dart';
 
-
 class FileInfoCard extends StatelessWidget {
-  const FileInfoCard({
-    super.key,
-    required this.info,
-  });
+  const FileInfoCard({super.key, required this.info});
 
   final CloudStorageInfo info;
 
