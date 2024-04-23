@@ -11,7 +11,6 @@ class TradeMarketingBloc
           datafiltered: [],
         )) {
     on<ReloadTradeMarketing>((event, emit) async {
-      print("entro a on reload");
       emit(LoadingTradeMarketingState(
         data: [],
         datafiltered: [],
@@ -31,8 +30,8 @@ class TradeMarketingBloc
       final TradeMarketingEntity? value = await apiResponseFuture;
       if (value != null && value.status != "N") {
         emit(SuccessTradeMarketingState(
-          data: value?.data,
-          datafiltered: value?.data,
+          data: value.data,
+          datafiltered: value.data,
         ));
       } else {
         emit(ErrorTradeMarketingState(
@@ -62,7 +61,6 @@ class TradeMarketingBloc
     });
 
     on<FilterByDateTradeMarketing>((event, emit) async {
-      print("entro a on filter");
       String fini = event.fini; // YYYY-MM-DD en formato de cadena
       String ffin = event.ffin; // YYYY-MM-DD en formato de cadena
       String finiDay = fini.split('-')[2];

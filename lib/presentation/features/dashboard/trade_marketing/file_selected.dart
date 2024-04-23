@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vistony_admin_dashboard/presentation/features/dashboard/bloc/navigation_bloc.dart';
 
 import '../../../../data/model/trade_marketing_model.dart';
 import '../../../../generated/assets.dart';
@@ -60,8 +59,8 @@ class _FileSelectedState extends State<FileSelected> {
               FileSelectedHeader(
                 tradeMarketingPageModel: state.data,
                 callback: widget.callback,
-                vendorName: widget!.vendorName!,
-                clientAddress: widget!.clientAddress!,
+                vendorName: widget.vendorName,
+                clientAddress: widget.clientAddress,
               ),
               if (!Responsive.isMobile(context))
                 Column(
@@ -357,12 +356,13 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
             IconButton(
               onPressed: () async {
                 String url = element.url ?? "";
-                if (url != "" && await canLaunchUrl(Uri.parse(url!))) {
-                  await launchUrl(Uri.parse(url!));
+                final scaffoldmessenger = ScaffoldMessenger.of(context);
+                if (url != "" && await canLaunchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"))) {
+                  await launchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"));
                   //showPopUpImage(context, url);
                 } else {
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldmessenger.clearSnackBars();
+                  scaffoldmessenger.showSnackBar(
                     SnackBar(
                       content: const Text('No se puede abrir el link'),
                       backgroundColor: primaryColor2.withOpacity(0.6),
@@ -396,8 +396,8 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                       children: [
                         Container(
                           width: 60.0,
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.image),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Icon(Icons.image),
                         ),
                         Expanded(flex: 60, child: Text('Evaluación',style: Theme.of(context).textTheme.titleMedium,)),
                         Expanded(flex: 40, child: Text('Respuesta',style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center)),
@@ -422,16 +422,16 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                             padding: const EdgeInsets.all(8.0),
                             child: IconButton(
                               onPressed: () async {
+                                final scaffoldmessenger = ScaffoldMessenger.of(context);
                                 String url = element.questionList![i].url ?? "";
                                 if (url != "" &&
-                                    await canLaunchUrl(Uri.parse(url!))) {
-                                  await launchUrl(Uri.parse(url!));
+                                    await canLaunchUrl(Uri.parse(url))) {
+                                  await launchUrl(Uri.parse(url));
 
                                   //showPopUpImage(context, url);
                                 } else {
-                                  ScaffoldMessenger.of(context)
-                                      .clearSnackBars();
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  scaffoldmessenger.clearSnackBars();
+                                  scaffoldmessenger.showSnackBar(
                                     SnackBar(
                                       content:
                                           const Text('No se puede abrir el link'),
@@ -541,7 +541,7 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                 url,
                 style: Theme.of(context)
                     .textTheme
-                    .headline6
+                    .titleLarge
                     ?.copyWith(color: Colors.black),
               ),
             ],

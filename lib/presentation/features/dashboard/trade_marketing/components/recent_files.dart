@@ -101,10 +101,10 @@ class _RecentFilesState extends State<RecentFiles> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(defaultPadding),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        decoration: const BoxDecoration(
                           color: primaryColor,
-                          borderRadius: const BorderRadius.all(
+                          borderRadius: BorderRadius.all(
                             Radius.circular(10),
                           ),
                         ),
@@ -231,12 +231,12 @@ class _RecentFilesState extends State<RecentFiles> {
           Expanded(
             child: CustomRawTableText(text: fileInfo.direccion??""),
           ),
-          Container(
+          SizedBox(
             width: 60.0,
               child: InkWell(
             onTap: () {
               widget.callback(
-                  fileInfo.docEntry!, fileInfo.vendedor, fileInfo.direccion);
+                  fileInfo.docEntry, fileInfo.vendedor, fileInfo.direccion);
             },
             child: SvgPicture.asset(
               Assets.iconsDocFile,

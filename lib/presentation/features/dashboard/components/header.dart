@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vistony_admin_dashboard/generated/assets.dart';
-import 'package:vistony_admin_dashboard/presentation/features/auth/Welcome/welcome_screen.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/controllers/menu_app_controller.dart';
 import '../../../core/controllers/responsive.dart';
+import '../../auth/Welcome/welcome_screen.dart';
 import '../bloc/navigation_bloc.dart';
 import '../trade_marketing/bloc/trade_marketing_bloc.dart';
 
@@ -112,7 +110,6 @@ class ProfileCard extends StatelessWidget {
         }
       },
     );
-    ;
   }
 }
 

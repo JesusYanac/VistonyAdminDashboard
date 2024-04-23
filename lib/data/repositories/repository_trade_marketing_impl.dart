@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../data/model/trade_marketing_model.dart';
 import '../../domain/repositories/repository_trade_marketing.dart';
@@ -36,31 +34,27 @@ class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
         return null;
       }
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       return null;
     }
   }
   @override
   Future<TradeMarketingPageModel?> getFormTradeMarketing(String docEntry) async {
     try {
-      print("Entro a getFormTradeMarketing");
       var apiUrl =
           'http://190.12.79.135:8060/get/api/TradeMarketing/GetEncuesta?DocEntry=$docEntry';
       var url = Uri.parse(proxyUrl + apiUrl);
-      print("url $url");
       var response = await http.get(url);
-      print("response ${response.body}");
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsondata = jsonDecode(response.body)[0];
         final TradeMarketingPageModel model =
             TradeMarketingPageModel.fromJson(jsondata);
-        print("model ${model.toString()}");
         return model;
       } else {
         return null;
       }
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       return null;
     }
   }
