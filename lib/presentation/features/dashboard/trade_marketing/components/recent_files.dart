@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -218,27 +216,27 @@ class _RecentFilesState extends State<RecentFiles> {
             ),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.cardName),
+            child: CustomRawTableText(text: fileInfo.cardName??""),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.vendedor),
+            child: CustomRawTableText(text: fileInfo.vendedor??""),
           ),
           SizedBox(
             width: 120.0,
             child: CustomRawTableText(
-              text: DateFormat("dd/MM/yyyy").format(DateTime.parse(fileInfo.dateCreate!)),
+              text: ("${fileInfo.dateCreate}"!="")?DateFormat("dd/MM/yyyy").format(DateTime.parse(fileInfo.dateCreate!)):"",
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.direccion),
+            child: CustomRawTableText(text: fileInfo.direccion??""),
           ),
           Container(
             width: 60.0,
               child: InkWell(
             onTap: () {
               widget.callback(
-                  fileInfo.cardCode!, fileInfo.vendedor, fileInfo.direccion);
+                  fileInfo.docEntry!, fileInfo.vendedor, fileInfo.direccion);
             },
             child: SvgPicture.asset(
               Assets.iconsDocFile,

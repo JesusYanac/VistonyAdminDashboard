@@ -11,14 +11,19 @@ class TradeMarketingEntity {
           json['data']?.map((x) => TradeMarketingHeader.fromJson(x)) ?? []),
     );
   }
+
+  @override
+  String toString() {
+    return 'TradeMarketingEntity{status: $status, data: $data}';
+  }
 }
 class TradeMarketingHeader {
   final String docEntry;
-  final String cardCode;
-  final String cardName;
-  final String dateCreate;
-  final String direccion;
-  final String vendedor;
+  final String? cardCode;
+  final String? cardName;
+  final String? dateCreate;
+  final String? direccion;
+  final String? vendedor;
 
   TradeMarketingHeader({
     required this.docEntry,
@@ -31,12 +36,12 @@ class TradeMarketingHeader {
 
   factory TradeMarketingHeader.fromJson(Map<String, dynamic> json) {
     return TradeMarketingHeader(
-      docEntry: json['DocEntry'],
-      cardCode: json['CardCode'],
-      cardName: json['CardName'],
-      dateCreate: json['DateCreate'],
-      direccion: json['Direccion'],
-      vendedor: json['Vendedor'],
+      docEntry: json['DocEntry']??"",
+      cardCode: json['CardCode']??"",
+      cardName: json['CardName']??"",
+      dateCreate: json['DateCreate']??"",
+      direccion: json['Direccion']??"",
+      vendedor: json['Vendedor']??"",
     );
   }
 
@@ -64,8 +69,8 @@ class TradeMarketingPageModel {
     this.idDocument,
     this.chkrecibido = "N",
     this.sectionList,
-    this.dateCreation,
-    this.dateCompletion,
+    this.dateCreation = "",
+    this.dateCompletion = "",
     this.imei,
     this.cardCode,
     this.cardName,

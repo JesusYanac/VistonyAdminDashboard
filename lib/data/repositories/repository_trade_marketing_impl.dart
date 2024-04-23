@@ -9,229 +9,64 @@ import '../../domain/repositories/repository_trade_marketing.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
+  var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   @override
-  Future<TradeMarketingEntity?> getTradeMarketing() async {
+  Future<TradeMarketingEntity?> getTradeMarketing(String dateini, String datefin) async {
     try {
-      String jsonString = '''
-{
-  "status": "S",
-  "data": [
-    {
-      "DocEntry": "4",
-      "CardCode": "C20604419361",
-      "CardName": "IMPORTACIONES Y SERVICIOS GEDEON S.A.C.",
-      "DateCreate": "2023-07-15",
-      "Direccion": "MZA. A LOTE. 9-A A.H. LOS LAURELES",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "5",
-      "CardCode": "C10435687909",
-      "CardName": "DE LA CRUZ HUAMAN EDISON",
-      "DateCreate": "2023-10-28",
-      "Direccion": "CAL.LA UNION MZA. D LOTE. 06 A.H. EL INTI",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "6",
-      "CardCode": "C10074522021",
-      "CardName": "VEGA CCANTO MADIO MARCELINO",
-      "DateCreate": "2024-01-05",
-      "Direccion": "AV. LOS PROCERES MZ A LOTE 11 AAHH EL INTI LIMA-LIMA - SAN JUAN DE MIRAFLORES",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "7",
-      "CardCode": "C10096560155",
-      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
-      "DateCreate": "2024-04-10",
-      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "8",
-      "CardCode": "C10096560155",
-      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
-      "DateCreate": "2024-02-18",
-      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "9",
-      "CardCode": "C10096560155",
-      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
-      "DateCreate": "2023-11-21",
-      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "10",
-      "CardCode": "C47304499",
-      "CardName": "SANDOVAL CORDOVA JORGE LUIS",
-      "DateCreate": "2023-08-30",
-      "Direccion": "Av. Mateo pumacahua mz. L1  Lt. 6 Santiago de Surco",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "11",
-      "CardCode": "C43877879",
-      "CardName": "VASQUEZ CAMPOS JOSE GILMER",
-      "DateCreate": "2024-03-12",
-      "Direccion": "JR.las Escarchas 104,A 23 Urb.Coop. El Mantaro Nro.121",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "12",
-      "CardCode": "C10106313119",
-      "CardName": "ALLCCA ALHUAY PEDRO",
-      "DateCreate": "2023-12-04",
-      "Direccion": "AV. SAN JUAN MZA. A1 LOTE. 5 P.J. PUMACAHUA MATEO",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "13",
-      "CardCode": "C10083092802",
-      "CardName": "CARDENAS INFANZON MAXIMO",
-      "DateCreate": "2024-01-20",
-      "Direccion": "AV. LOS POSTES NRO. 380 ASOC SAN HILARION (ALT PARAD 15 DE AV LAS FLORES) LIMA - LIMA - SAN JUAN DE",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "14",
-      "CardCode": "C10417166012",
-      "CardName": "CALDERON RAMIREZ GLORIA ELIZABETH",
-      "DateCreate": "2023-10-07",
-      "Direccion": "MZA. D LOTE. L3 P.J. JOSE MARIA ARGUEDAS",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "15",
-      "CardCode": "C74904609",
-      "CardName": "FERNANDEZ ALTAMIRANO ALEX FREDY",
-      "DateCreate": "2023-09-14",
-      "Direccion": "MZ B LT 5  LA MERCED",
-      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
-    },
-    {
-      "DocEntry": "16",
-      "CardCode": "C10326452268",
-      "CardName": "ROBLES ESPINOZA WALTER MANUEL",
-      "DateCreate": "2024-03-21",
-      "Direccion": "PROLONG. JESUS DEL VALLE NRO. 860",
-      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
-    },
-    {
-      "DocEntry": "17",
-      "CardCode": "C10088022861",
-      "CardName": "CAVERO LEON ALBERTO",
-      "DateCreate": "2023-11-30",
-      "Direccion": "AV. TOMAS MARSANO NRO. 3974 URB. LOS MOROCHUCOS (ALTURA AV SANTIAGO DE SURCO) LIMA - LIMA - SANTIAGO",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "18",
-      "CardCode": "C10069360462",
-      "CardName": "CANDIA CHINCHAY GAUDENCIO",
-      "DateCreate": "2024-02-05",
-      "Direccion": "Av. Proceres de la Independencia NRO.Mz A lote 08, Asoc.de Vivienda Los Pinos S.J.L",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "19",
-      "CardCode": "C10409406390",
-      "CardName": "OSORIO HUARANGA LINA BANEZA",
-      "DateCreate": "2024-04-16",
-      "Direccion": "Av. Santiago de surco 3535",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "20",
-      "CardCode": "C10071301856",
-      "CardName": "MATOS VELASQUEZ AGUSTIN",
-      "DateCreate": "2023-08-15",
-      "Direccion": "AV. SAN MARTÍN ESTE NRO. 317 URB. LOS PINOS",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "21",
-      "CardCode": "C10100212051",
-      "CardName": "SANCHEZ VILCHEZ WILLIAM GODOFREDO",
-      "DateCreate": "2023-12-19",
-      "Direccion": "JR. JOSE AGUILAR SEGURA Mz B Lt 23A A.H",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "22",
-      "CardCode": "C20607295965",
-      "CardName": "M&C LEYMA S.A.C.",
-      "DateCreate": "2023-10-02",
-      "Direccion": "PANAMERICANA NORTE KM 78 AA.HH SARITA COLONIA MZ",
-      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
-    },
-    {
-      "DocEntry": "23",
-      "CardCode": "C20392592904",
-      "CardName": "SERVICENTRO VIRGEN DE CHAPISAC",
-      "DateCreate": "2024-03-01",
-      "Direccion": "AV. PROCERES MZA. E LOTE. 15 URB. PROCERES",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "24",
-      "CardCode": "C10445463006",
-      "CardName": "TARRILLO LOZANO LEOVIGILDO MIGUEL ANGEL",
-      "DateCreate": "2023-07-23",
-      "Direccion": "MZA. A LOTE. 20 A.H. M.JESUS OROPEZA CHONTA",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "25",
-      "CardCode": "C10070370170",
-      "CardName": "GABRIEL DIAZ CLETO MARCELINO",
-      "DateCreate": "2023-08-27",
-      "Direccion": "AV. PASEO DE LA REPUBLICA NRO. 1441 URB. SANTA LEONOR ET. UNO.  LIMA - LIMA - CHORRILLOS",
-      "Vendedor": "514 SUSAN OCHOA"
-    },
-    {
-      "DocEntry": "26",
-      "CardCode": "C40893731",
-      "CardName": "ANCCO QUISPE VALENTINA",
-      "DateCreate": "2023-12-31",
-      "Direccion": "AV. PROCERES INDEPENDENCIA 3479",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "28",
-      "CardCode": "C10096699056",
-      "CardName": "ALEJOS VICENTE,SANDRA ROSA",
-      "DateCreate": "2023-09-01",
-      "Direccion": "CALL CORICANCHA NRO 725 URB ZARATE LIMA-LIMA-SAN JUAN LURIGANCHO",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    },
-    {
-      "DocEntry": "27",
-      "CardCode": "C10472315523",
-      "CardName": "PAREDES JACINTO JESUS ALBERTO",
-      "DateCreate": "2024-02-10",
-      "Direccion": "Av. Mariategui S/N. Puerta 5 Mercado 2 de Mayo",
-      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
-    }
-  ]
-}
-''';
+      // URL de la API a consumir
+      var apiUrl = 'http://190.12.79.135:8060/get/api/TradeMarketing/Get';
 
-      final Map<String, dynamic> jsondata = jsonDecode(jsonString);
-      TradeMarketingEntity model = TradeMarketingEntity.fromJson(jsondata);
-      return model;
+      // Parámetros de la consulta
+      var queryParams = 'DateStart=$dateini&DateFinish=$datefin';
+
+      // Construir la URL completa con los parámetros
+      var url = Uri.parse('$proxyUrl$apiUrl?$queryParams');
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        final String jsonString = '''
+          {
+            "status": "S",
+            "data": ${response.body}
+          }
+        ''';
+        final Map<String, dynamic> jsondata = jsonDecode(jsonString);
+        TradeMarketingEntity model = TradeMarketingEntity.fromJson(jsondata);
+        return model;
+      } else {
+        return null;
+      }
     } catch (e) {
+      print('Error: $e');
       return null;
     }
   }
-
   @override
-  Future<TradeMarketingPageModel?> getFormTradeMarketing() async {
+  Future<TradeMarketingPageModel?> getFormTradeMarketing(String docEntry) async {
     try {
-      String jsonString = '''
+      print("Entro a getFormTradeMarketing");
+      var apiUrl =
+          'http://190.12.79.135:8060/get/api/TradeMarketing/GetEncuesta?DocEntry=$docEntry';
+      var url = Uri.parse(proxyUrl + apiUrl);
+      print("url $url");
+      var response = await http.get(url);
+      print("response ${response.body}");
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsondata = jsonDecode(response.body)[0];
+        final TradeMarketingPageModel model =
+            TradeMarketingPageModel.fromJson(jsondata);
+        print("model ${model.toString()}");
+        return model;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+}
+
+String jsonTestFormTradeMarketing() => '''
             {
                 "cardCode": "C10096699056",
                 "cardName": "ALEJOS VICENTE,SANDRA ROSA",
@@ -1312,11 +1147,211 @@ class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
             }
 
       ''';
-      final Map<String, dynamic> jsondata = jsonDecode(jsonString);
-      final TradeMarketingPageModel model = TradeMarketingPageModel.fromJson(jsondata);
-      return model;
-    } catch (e) {
-      return null;
+
+String jsonTestTradeMarketing() => '''
+{
+  "status": "S",
+  "data": [
+    {
+      "DocEntry": "4",
+      "CardCode": "C20604419361",
+      "CardName": "IMPORTACIONES Y SERVICIOS GEDEON S.A.C.",
+      "DateCreate": "2023-07-15",
+      "Direccion": "MZA. A LOTE. 9-A A.H. LOS LAURELES",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "5",
+      "CardCode": "C10435687909",
+      "CardName": "DE LA CRUZ HUAMAN EDISON",
+      "DateCreate": "2023-10-28",
+      "Direccion": "CAL.LA UNION MZA. D LOTE. 06 A.H. EL INTI",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "6",
+      "CardCode": "C10074522021",
+      "CardName": "VEGA CCANTO MADIO MARCELINO",
+      "DateCreate": "2024-01-05",
+      "Direccion": "AV. LOS PROCERES MZ A LOTE 11 AAHH EL INTI LIMA-LIMA - SAN JUAN DE MIRAFLORES",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "7",
+      "CardCode": "C10096560155",
+      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
+      "DateCreate": "2024-04-10",
+      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "8",
+      "CardCode": "C10096560155",
+      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
+      "DateCreate": "2024-02-18",
+      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "9",
+      "CardCode": "C10096560155",
+      "CardName": "TUPAYUPANQUI ZUÑIGA JOSE SANTOS",
+      "DateCreate": "2023-11-21",
+      "Direccion": "Av.Jorge Basadre este 407 urb.San Carlos S.j.l",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "10",
+      "CardCode": "C47304499",
+      "CardName": "SANDOVAL CORDOVA JORGE LUIS",
+      "DateCreate": "2023-08-30",
+      "Direccion": "Av. Mateo pumacahua mz. L1  Lt. 6 Santiago de Surco",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "11",
+      "CardCode": "C43877879",
+      "CardName": "VASQUEZ CAMPOS JOSE GILMER",
+      "DateCreate": "2024-03-12",
+      "Direccion": "JR.las Escarchas 104,A 23 Urb.Coop. El Mantaro Nro.121",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "12",
+      "CardCode": "C10106313119",
+      "CardName": "ALLCCA ALHUAY PEDRO",
+      "DateCreate": "2023-12-04",
+      "Direccion": "AV. SAN JUAN MZA. A1 LOTE. 5 P.J. PUMACAHUA MATEO",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "13",
+      "CardCode": "C10083092802",
+      "CardName": "CARDENAS INFANZON MAXIMO",
+      "DateCreate": "2024-01-20",
+      "Direccion": "AV. LOS POSTES NRO. 380 ASOC SAN HILARION (ALT PARAD 15 DE AV LAS FLORES) LIMA - LIMA - SAN JUAN DE",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "14",
+      "CardCode": "C10417166012",
+      "CardName": "CALDERON RAMIREZ GLORIA ELIZABETH",
+      "DateCreate": "2023-10-07",
+      "Direccion": "MZA. D LOTE. L3 P.J. JOSE MARIA ARGUEDAS",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "15",
+      "CardCode": "C74904609",
+      "CardName": "FERNANDEZ ALTAMIRANO ALEX FREDY",
+      "DateCreate": "2023-09-14",
+      "Direccion": "MZ B LT 5  LA MERCED",
+      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
+    },
+    {
+      "DocEntry": "16",
+      "CardCode": "C10326452268",
+      "CardName": "ROBLES ESPINOZA WALTER MANUEL",
+      "DateCreate": "2024-03-21",
+      "Direccion": "PROLONG. JESUS DEL VALLE NRO. 860",
+      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
+    },
+    {
+      "DocEntry": "17",
+      "CardCode": "C10088022861",
+      "CardName": "CAVERO LEON ALBERTO",
+      "DateCreate": "2023-11-30",
+      "Direccion": "AV. TOMAS MARSANO NRO. 3974 URB. LOS MOROCHUCOS (ALTURA AV SANTIAGO DE SURCO) LIMA - LIMA - SANTIAGO",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "18",
+      "CardCode": "C10069360462",
+      "CardName": "CANDIA CHINCHAY GAUDENCIO",
+      "DateCreate": "2024-02-05",
+      "Direccion": "Av. Proceres de la Independencia NRO.Mz A lote 08, Asoc.de Vivienda Los Pinos S.J.L",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "19",
+      "CardCode": "C10409406390",
+      "CardName": "OSORIO HUARANGA LINA BANEZA",
+      "DateCreate": "2024-04-16",
+      "Direccion": "Av. Santiago de surco 3535",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "20",
+      "CardCode": "C10071301856",
+      "CardName": "MATOS VELASQUEZ AGUSTIN",
+      "DateCreate": "2023-08-15",
+      "Direccion": "AV. SAN MARTÍN ESTE NRO. 317 URB. LOS PINOS",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "21",
+      "CardCode": "C10100212051",
+      "CardName": "SANCHEZ VILCHEZ WILLIAM GODOFREDO",
+      "DateCreate": "2023-12-19",
+      "Direccion": "JR. JOSE AGUILAR SEGURA Mz B Lt 23A A.H",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "22",
+      "CardCode": "C20607295965",
+      "CardName": "M&C LEYMA S.A.C.",
+      "DateCreate": "2023-10-02",
+      "Direccion": "PANAMERICANA NORTE KM 78 AA.HH SARITA COLONIA MZ",
+      "Vendedor": "45 PALOMINO JIMENEZ ANGEL"
+    },
+    {
+      "DocEntry": "23",
+      "CardCode": "C20392592904",
+      "CardName": "SERVICENTRO VIRGEN DE CHAPISAC",
+      "DateCreate": "2024-03-01",
+      "Direccion": "AV. PROCERES MZA. E LOTE. 15 URB. PROCERES",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "24",
+      "CardCode": "C10445463006",
+      "CardName": "TARRILLO LOZANO LEOVIGILDO MIGUEL ANGEL",
+      "DateCreate": "2023-07-23",
+      "Direccion": "MZA. A LOTE. 20 A.H. M.JESUS OROPEZA CHONTA",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "25",
+      "CardCode": "C10070370170",
+      "CardName": "GABRIEL DIAZ CLETO MARCELINO",
+      "DateCreate": "2023-08-27",
+      "Direccion": "AV. PASEO DE LA REPUBLICA NRO. 1441 URB. SANTA LEONOR ET. UNO.  LIMA - LIMA - CHORRILLOS",
+      "Vendedor": "514 SUSAN OCHOA"
+    },
+    {
+      "DocEntry": "26",
+      "CardCode": "C40893731",
+      "CardName": "ANCCO QUISPE VALENTINA",
+      "DateCreate": "2023-12-31",
+      "Direccion": "AV. PROCERES INDEPENDENCIA 3479",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "28",
+      "CardCode": "C10096699056",
+      "CardName": "ALEJOS VICENTE,SANDRA ROSA",
+      "DateCreate": "2023-09-01",
+      "Direccion": "CALL CORICANCHA NRO 725 URB ZARATE LIMA-LIMA-SAN JUAN LURIGANCHO",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
+    },
+    {
+      "DocEntry": "27",
+      "CardCode": "C10472315523",
+      "CardName": "PAREDES JACINTO JESUS ALBERTO",
+      "DateCreate": "2024-02-10",
+      "Direccion": "Av. Mariategui S/N. Puerta 5 Mercado 2 de Mayo",
+      "Vendedor": "208 CORDOVA MASIAS JOSE DEL CARMEN"
     }
-  }
+  ]
 }
+''';

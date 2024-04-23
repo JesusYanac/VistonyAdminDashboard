@@ -12,7 +12,7 @@ class FormTradeMarketingBloc extends Bloc<FormTradeMarketingEvent, FormTradeMark
       final minimumDelayFuture = Future.delayed(const Duration(seconds: 1));
 
       // Realiza la consulta a la API
-      final apiResponseFuture = UseCaseTradeMarketing().getFormTradeMarketing();
+      final apiResponseFuture = UseCaseTradeMarketing().getFormTradeMarketing(event.codeForm);
 
       // Espera a que ambas tareas (retraso mínimo y respuesta de la API) se completen
       await Future.wait([minimumDelayFuture, apiResponseFuture]);
