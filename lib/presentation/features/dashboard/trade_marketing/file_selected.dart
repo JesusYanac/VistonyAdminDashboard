@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../data/model/trade_marketing_model.dart';
 import '../../../../generated/assets.dart';
@@ -10,7 +9,11 @@ import '../../../core/controllers/responsive.dart';
 import 'bloc/form_trade_marketing_bloc.dart';
 
 class FileSelected extends StatefulWidget {
-  const FileSelected({super.key, required this.callback, required this.vendorName, required this.clientAddress});
+  const FileSelected(
+      {super.key,
+      required this.callback,
+      required this.vendorName,
+      required this.clientAddress});
   final String vendorName;
   final String clientAddress;
 
@@ -72,10 +75,12 @@ class _FileSelectedState extends State<FileSelected> {
                             child: Container(
                               color: Colors.black.withOpacity(
                                   0.2), // Fondo negro con opacidad para la fila de cabecera
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   for (int j = i;
                                       j < i + 2 &&
@@ -357,9 +362,10 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
               onPressed: () async {
                 String url = element.url ?? "";
                 final scaffoldmessenger = ScaffoldMessenger.of(context);
-                if (url != "" && await canLaunchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"))) {
-                  await launchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"));
-                  //showPopUpImage(context, url);
+                if (url !=
+                    "" /*&& await canLaunchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"))*/) {
+                  //await launchUrl(Uri.parse("https://cors-anywhere.herokuapp.com/$url"));
+                  showPopUpImage(context, url, element.title ?? "");
                 } else {
                   scaffoldmessenger.clearSnackBars();
                   scaffoldmessenger.showSnackBar(
@@ -399,14 +405,24 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                           padding: const EdgeInsets.all(8.0),
                           child: const Icon(Icons.image),
                         ),
-                        Expanded(flex: 60, child: Text('Evaluación',style: Theme.of(context).textTheme.titleMedium,)),
-                        Expanded(flex: 40, child: Text('Respuesta',style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center)),
+                        Expanded(
+                            flex: 60,
+                            child: Text(
+                              'Evaluación',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            )),
+                        Expanded(
+                            flex: 40,
+                            child: Text('Respuesta',
+                                style: Theme.of(context).textTheme.titleMedium,
+                                textAlign: TextAlign.center)),
                       ],
                     ),
                   ),
                   for (int i = 0; i < element.questionList!.length; i++)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: defaultPadding),
                       decoration: BoxDecoration(
                         color: (i % 2 != 0)
                             ? const Color.fromRGBO(0, 0, 0, 0.2)
@@ -422,20 +438,28 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                             padding: const EdgeInsets.all(8.0),
                             child: IconButton(
                               onPressed: () async {
-                                final scaffoldmessenger = ScaffoldMessenger.of(context);
+                                final scaffoldmessenger =
+                                    ScaffoldMessenger.of(context);
                                 String url = element.questionList![i].url ?? "";
-                                if (url != "" &&
-                                    await canLaunchUrl(Uri.parse(url))) {
-                                  await launchUrl(Uri.parse(url));
+                                if (url !=
+                                        "" /* &&
+                                    await canLaunchUrl(Uri.parse(url))*/
+                                    ) {
+                                  // await launchUrl(Uri.parse(url));
 
-                                  //showPopUpImage(context, url);
+                                  showPopUpImage(
+                                      context,
+                                      url,
+                                      element.questionList![i].description ??
+                                          "");
                                 } else {
                                   scaffoldmessenger.clearSnackBars();
                                   scaffoldmessenger.showSnackBar(
                                     SnackBar(
-                                      content:
-                                          const Text('No se puede abrir el link'),
-                                      backgroundColor: primaryColor2.withOpacity(0.6),
+                                      content: const Text(
+                                          'No se puede abrir el link'),
+                                      backgroundColor:
+                                          primaryColor2.withOpacity(0.6),
                                     ),
                                   );
                                 }
@@ -450,66 +474,78 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                               ),
                             ),
                           ),
-                          Expanded(flex: 60,
+                          Expanded(
+                              flex: 60,
                               child: Text(
                                   "${element.questionList![i].description}")),
                           if (element.questionList![i].type == "RM")
-                            Expanded(flex: 40,
-                                child: Row(children: [
-                              for (var item
-                                  in element.questionList![i].answerList!)
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        color: item.responsevalue == "true"
-                                            ? primaryColor.withOpacity(0.6)
-                                            : primaryColor2.withOpacity(0.6),
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
+                            Expanded(
+                              flex: 40,
+                              child: Row(
+                                children: [
+                                  for (var item
+                                      in element.questionList![i].answerList!)
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: item.responsevalue == "true"
+                                              ? primaryColor.withOpacity(0.6)
+                                              : primaryColor2.withOpacity(0.6),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                        ),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0, vertical: 8.0),
+                                        alignment: Alignment.center,
+                                        child: Center(
+                                          child: Text(
+                                            "${item.answer}",
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
                                         ),
                                       ),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 4.0, vertical: 8.0),
-                                      alignment: Alignment.center,
-                                      child: Center(
-                                        child: Text(
-                                          "${item.answer}",
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      )),
-                                ),
-                            ])),
+                                    ),
+                                ],
+                              ),
+                            ),
                           if (element.questionList![i].type == "RT")
-                            Expanded(flex: 40,
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                    "${(element.questionList![i].responsevalue == null || element.questionList![i].responsevalue == "") ? "-" : element.questionList![i].responsevalue}"),
-                              ],
-                            )),
+                            Expanded(
+                              flex: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      "${(element.questionList![i].responsevalue == null || element.questionList![i].responsevalue == "") ? "-" : element.questionList![i].responsevalue}"),
+                                ],
+                              ),
+                            ),
                           if (element.questionList![i].type == "RL")
-                            Expanded(flex: 40,
+                            Expanded(
+                              flex: 40,
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   for (var item
                                       in element.questionList![i].answerList!)
-                                    if(item.responsevalue == "true")Expanded(
+                                    if (item.responsevalue == "true")
+                                      Expanded(
                                         child: Container(
-                                            /*color: (item.responsevalue ==
+                                          /*color: (item.responsevalue ==
                                                     "true")
                                                 ? primaryColor.withOpacity(0.6)
                                                 : primaryColor2
                                                     .withOpacity(0.6),*/
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 4.0, vertical: 8.0),
-                                            child: Center(
-                                                child:
-                                                    Text("${item.answer}")))),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 4.0, vertical: 8.0),
+                                          child: Center(
+                                            child: Text("${item.answer}"),
+                                          ),
+                                        ),
+                                      ),
                                 ],
                               ),
                             ),
@@ -525,27 +561,37 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
     );
   }
 
-  void showPopUpImage(BuildContext context, String url) {
+  void showPopUpImage(BuildContext context, String url, String title) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Column(
-            children: [
-              Container(
-                height: 500,
-                width: 500,
-                color: bgColor,
-              ),
-              Text(
-                url,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: Colors.black),
-              ),
-            ],
+          backgroundColor: bgColor,
+          content: Container(
+            height: MediaQuery.of(context).size.width * 0.8,
+            width: Responsive.isDesktop(context)
+                ? MediaQuery.of(context).size.width * 0.5
+                : Responsive.isTablet(context)
+                    ? MediaQuery.of(context).size.width * 0.8
+                    : MediaQuery.of(context).size.width * 0.9,
+            color: bgColor,
+            child: Image.network("https://cors-anywhere.herokuapp.com/$url",
+                fit: BoxFit.contain),
           ),
+          title: Text(title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Colors.white)),
+          actions: <Widget>[
+            TextButton(
+              child:
+                  const Text('Cerrar', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
@@ -582,9 +628,9 @@ class _FileSelectedHeaderState extends State<FileSelectedHeader> {
 
   @override
   void didUpdateWidget(covariant FileSelectedHeader oldWidget) {
-    if (widget.tradeMarketingPageModel != tradeMarketingPageModel
-    || widget.vendorName != vendorName
-    || widget.clientAddress != clientAddress) {
+    if (widget.tradeMarketingPageModel != tradeMarketingPageModel ||
+        widget.vendorName != vendorName ||
+        widget.clientAddress != clientAddress) {
       setState(() {
         tradeMarketingPageModel = widget.tradeMarketingPageModel;
         vendorName = widget.vendorName;
@@ -596,9 +642,9 @@ class _FileSelectedHeaderState extends State<FileSelectedHeader> {
 
   @override
   void didChangeDependencies() {
-    if (widget.tradeMarketingPageModel != tradeMarketingPageModel
-        || widget.vendorName != vendorName
-        || widget.clientAddress != clientAddress) {
+    if (widget.tradeMarketingPageModel != tradeMarketingPageModel ||
+        widget.vendorName != vendorName ||
+        widget.clientAddress != clientAddress) {
       setState(() {
         tradeMarketingPageModel = widget.tradeMarketingPageModel;
         vendorName = widget.vendorName;
@@ -627,8 +673,7 @@ class _FileSelectedHeaderState extends State<FileSelectedHeader> {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white
-                ),
+                    color: Colors.white),
               ),
             ],
           ),
@@ -641,7 +686,11 @@ class _FileSelectedHeaderState extends State<FileSelectedHeader> {
           child: Column(
             children: [
               buttonBack,
-              Text("Formulario del punto de Venta", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: primaryColor)),
+              Text("Formulario del punto de Venta",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: primaryColor)),
               RowIconData(
                 icon: Icons.calendar_month_outlined,
                 data: "${tradeMarketingPageModel?.dateCreation}",
@@ -678,9 +727,11 @@ class RowIconData extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Icon(icon, color: primaryColor,),
+          child: Icon(
+            icon,
+            color: primaryColor,
+          ),
         ),
-
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Text(
@@ -692,4 +743,3 @@ class RowIconData extends StatelessWidget {
     );
   }
 }
-

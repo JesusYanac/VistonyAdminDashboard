@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:rive/rive.dart';
+import 'package:vistony_admin_dashboard/presentation/core/controllers/responsive.dart';
 
 import '../../../../../data/model/trade_marketing_model.dart';
 import '../../../../../generated/assets.dart';
@@ -121,7 +122,9 @@ class _RecentFilesState extends State<RecentFiles> {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleMedium,
+                                      .titleSmall?.copyWith(
+                                    fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
+                                  ),
                                 ),
                               ):(headers[index] == "N°" || headers[index].toLowerCase() == " ")?
                               Container(
@@ -132,14 +135,18 @@ class _RecentFilesState extends State<RecentFiles> {
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleMedium,
+                                      .titleSmall?.copyWith(
+                                    fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
+                                  ),
                                 ),
                               ): Expanded(
                                       child: Text(
                                         headers[index].toUpperCase(),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium,
+                                            .titleSmall?.copyWith(
+                                          fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
+                                        ),
                                       ),
                                     );
                             },

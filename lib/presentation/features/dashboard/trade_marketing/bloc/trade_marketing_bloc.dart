@@ -20,23 +20,25 @@ class TradeMarketingBloc
 
       // Realiza la consulta a la API
       final apiResponseFuture = UseCaseTradeMarketing().getTradeMarketing(
-          DateTime.now().toString().split(" ")[0],
-          DateTime.now().toString().split(" ")[0]);
+        DateTime(DateTime.now().year, DateTime.now().month, 1).toString().split(' ')[0],
+        DateTime.now().toString().split(' ')[0],
+      );
+
 
       // Espera a que ambas tareas (retraso mínimo y respuesta de la API) se completen
       await Future.wait([minimumDelayFuture, apiResponseFuture]);
 
       // Obtiene el valor de la respuesta de la API
       final TradeMarketingEntity? value = await apiResponseFuture;
-      if (value != null && value.status != "N") {
+      if (value != null && value.data != null && value.data!.isNotEmpty && value.status != "N") {
         emit(SuccessTradeMarketingState(
           data: value.data,
           datafiltered: value.data,
         ));
       } else {
         emit(ErrorTradeMarketingState(
-          data: value?.data,
-          datafiltered: value?.data,
+          data: [],
+          datafiltered: [],
         ));
       }
     });
@@ -53,7 +55,7 @@ class TradeMarketingBloc
           datafiltered: datafiltered,
         ));
       } else {
-        emit(SuccessTradeMarketingState(
+        emit(ErrorTradeMarketingState(
           data: data,
           datafiltered: data,
         ));
