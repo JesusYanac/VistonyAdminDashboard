@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../data/model/trade_marketing_model.dart';
@@ -34,6 +35,7 @@ class TradeMarketingBloc
         emit(SuccessTradeMarketingState(
           data: value.data,
           datafiltered: value.data,
+          header: state.header,
         ));
       } else {
         emit(ErrorTradeMarketingState(
@@ -44,20 +46,69 @@ class TradeMarketingBloc
     });
     on<FilterTradeMarketing>((event, emit) {
       List<TradeMarketingHeader>? data = state.data;
-      if (data != null && event.value.isNotEmpty) {
-        List<TradeMarketingHeader>? datafiltered = data.where((element) {
-          return (element.cardName??"")
-              .toLowerCase()
-              .contains(event.value.toLowerCase());
-        }).toList();
+      debugPrint("state.header ${state.header}");
+      if(state.header == "Cliente"|| state.header == ""){
+        if (data != null && event.value.isNotEmpty) {
+          List<TradeMarketingHeader>? datafiltered = data.where((element) {
+            return (element.cardName??"")
+                .toLowerCase()
+                .contains(event.value.toLowerCase());
+          }).toList();
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: datafiltered,
+            header: state.header,
+          ));
+        } else {
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: data,
+            header: state.header,
+          ));
+        }
+      }else if (state.header == "Vendedor") {
+        if (data != null && event.value.isNotEmpty) {
+          List<TradeMarketingHeader>? datafiltered = data.where((element) {
+            return (element.vendedor??"")
+                .toLowerCase()
+                .contains(event.value.toLowerCase());
+          }).toList();
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: datafiltered,
+            header: state.header,
+          ));
+        } else {
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: data,
+            header: state.header,
+          ));
+        }
+      }else if (state.header == "Dirección") {
+        if (data != null && event.value.isNotEmpty) {
+          List<TradeMarketingHeader>? datafiltered = data.where((element) {
+            return (element.direccion??"")
+                .toLowerCase()
+                .contains(event.value.toLowerCase());
+          }).toList();
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: datafiltered,
+            header: state.header,
+          ));
+        } else {
+          emit(SuccessTradeMarketingState(
+            data: data,
+            datafiltered: data,
+            header: state.header,
+          ));
+        }
+      }else{
         emit(SuccessTradeMarketingState(
           data: data,
-          datafiltered: datafiltered,
-        ));
-      } else {
-        emit(ErrorTradeMarketingState(
-          data: data,
           datafiltered: data,
+          header: state.header,
         ));
       }
     });
@@ -92,6 +143,7 @@ class TradeMarketingBloc
         emit(SuccessTradeMarketingState(
           data: value.data,
           datafiltered: value.data,
+          header: "Fecha",
         ));
       } else {
         emit(ErrorTradeMarketingState(
@@ -102,6 +154,13 @@ class TradeMarketingBloc
 
 
     });
+    on<FilterTradeMarketingByHeader>((event, emit) {
+      emit(SuccessTradeMarketingState(
+        data: state.data,
+        datafiltered: state.data,
+          header: event.header,
+      ));
+    });
   }
   void reloadTradeMarketing() => add(ReloadTradeMarketing());
 
@@ -109,6 +168,8 @@ class TradeMarketingBloc
 
   void filterByDateTradeMarketing(fini, ffin) =>
       add(FilterByDateTradeMarketing(fini, ffin));
+
+  void setFilter(String header) => add(FilterTradeMarketingByHeader(header));
 }
 
 class TradeMarketingEvent {
@@ -124,6 +185,11 @@ class FilterTradeMarketing extends TradeMarketingEvent {
   FilterTradeMarketing(this.value);
 }
 
+class FilterTradeMarketingByHeader extends TradeMarketingEvent {
+  final String? header;
+  FilterTradeMarketingByHeader(this.header);
+}
+
 class FilterByDateTradeMarketing extends TradeMarketingEvent {
   final String fini;
   final String ffin;
@@ -133,7 +199,8 @@ class FilterByDateTradeMarketing extends TradeMarketingEvent {
 class TradeMarketingState {
   List<TradeMarketingHeader>? data;
   List<TradeMarketingHeader>? datafiltered;
-  TradeMarketingState({required this.data, required this.datafiltered});
+  String? header;
+  TradeMarketingState({required this.data, required this.datafiltered, this.header});
 }
 
 class InitialTradeMarketingState extends TradeMarketingState {
@@ -148,7 +215,7 @@ class LoadingTradeMarketingState extends TradeMarketingState {
 
 class SuccessTradeMarketingState extends TradeMarketingState {
   SuccessTradeMarketingState(
-      {required super.data, required super.datafiltered});
+      {required super.data, required super.datafiltered, required super.header});
 }
 
 class ErrorTradeMarketingState extends TradeMarketingState {

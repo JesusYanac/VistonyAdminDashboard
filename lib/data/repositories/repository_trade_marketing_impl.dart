@@ -19,7 +19,9 @@ class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
 
       // Construir la URL completa con los parámetros
       var url = Uri.parse('$proxyUrl$apiUrl?$queryParams');
+      debugPrint(url.toString());
       var response = await http.get(url);
+      debugPrint("response: ${response.body}");
       if (response.statusCode == 200) {
         final String jsonString = '''
           {

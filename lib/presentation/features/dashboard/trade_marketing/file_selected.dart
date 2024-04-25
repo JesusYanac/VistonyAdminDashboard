@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
@@ -575,8 +576,23 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                     ? MediaQuery.of(context).size.width * 0.8
                     : MediaQuery.of(context).size.width * 0.9,
             color: bgColor,
-            child: Image.network("https://cors-anywhere.herokuapp.com/$url",
-                fit: BoxFit.contain),
+            child: // imagen con loading builder
+            CachedNetworkImage(
+              imageUrl: "https://cors-anywhere.herokuapp.com/$url",
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
+                      child: LinearProgressIndicator(
+                        backgroundColor: primaryColor2, // Fondo gris
+                        valueColor: const AlwaysStoppedAnimation<Color>(primaryColor), // Color de carga rojo
+                        value: downloadProgress.progress,
+                      ),
+                    ),
+                  ),
+              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
+            )
+,
           ),
           title: Text(title,
               style: Theme.of(context)

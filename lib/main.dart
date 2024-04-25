@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'presentation/core/constants.dart';
 import 'presentation/features/auth/Welcome/welcome_screen.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   runApp(const MyApp());
 }
 
@@ -56,6 +54,13 @@ class MyApp extends StatelessWidget {
           titleSmall: TextStyle(color: kPrimaryLightColor),
         ),
       ),
+      supportedLocales: const [
+        Locale('es', 'ES'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       home: const WelcomeScreen(),
     );
   }

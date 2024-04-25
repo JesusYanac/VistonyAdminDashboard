@@ -28,6 +28,7 @@ class _RecentFilesState extends State<RecentFiles> {
     "Dirección",
     " "
   ];
+  final List<bool> selectedCheck = [false, false, false, false, false, false];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,40 +116,86 @@ class _RecentFilesState extends State<RecentFiles> {
                             (index) {
                               return (headers[index].toLowerCase() == "fecha")
                                   ? Container(
-                                color: Colors.transparent,
-                                width: 120,
-                                child: Text(
-                                  headers[index].toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall?.copyWith(
-                                    fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
-                                  ),
-                                ),
-                              ):(headers[index] == "N°" || headers[index].toLowerCase() == " ")?
-                              Container(
-                                width: 60,
-                                color: Colors.transparent,
-                                child: Text(
-                                  headers[index],
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall?.copyWith(
-                                    fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
-                                  ),
-                                ),
-                              ): Expanded(
+                                      color: Colors.transparent,
+                                      width: 120,
                                       child: Text(
                                         headers[index].toUpperCase(),
+                                        textAlign: TextAlign.center,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleSmall?.copyWith(
-                                          fontSize: Responsive.isMobile(context) ? 10:Responsive.isTablet(context) ? 12 : 14,
-                                        ),
+                                            .titleSmall
+                                            ?.copyWith(
+                                              fontSize: Responsive.isMobile(
+                                                      context)
+                                                  ? 10
+                                                  : Responsive.isTablet(context)
+                                                      ? 12
+                                                      : 14,
+                                            ),
                                       ),
-                                    );
+                                    )
+                                  : (headers[index] == "N°" ||
+                                          headers[index].toLowerCase() == " ")
+                                      ? Container(
+                                          width: 60,
+                                          color: Colors.transparent,
+                                          child: Text(
+                                            headers[index],
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall
+                                                ?.copyWith(
+                                                  fontSize: Responsive.isMobile(
+                                                          context)
+                                                      ? 10
+                                                      : Responsive.isTablet(
+                                                              context)
+                                                          ? 12
+                                                          : 14,
+                                                ),
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                headers[index].toUpperCase(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                      fontSize: Responsive.isMobile(
+                                                              context)
+                                                          ? 10
+                                                          : Responsive.isTablet(
+                                                                  context)
+                                                              ? 12
+                                                              : 14,
+                                                    ),
+                                              ),
+                                              const SizedBox(width: 8,),
+                                              Checkbox(
+                                                value: selectedCheck[index],
+                                                onChanged: (value) {
+
+                                                  //poner todos en falso y cambiar el estado solo del que se esta seleccionando
+                                                  setState(() {
+                                                    for (int i = 0; i < selectedCheck.length; i++) {
+                                                      if (i == index) {
+                                                        selectedCheck[i] = value!;
+                                                      } else {
+                                                        selectedCheck[i] = false;
+                                                      }
+                                                    }
+                                                  });
+                                                  BlocProvider.of<TradeMarketingBloc>(context).setFilter(headers[index]);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
                             },
                           ),
                         ),
@@ -157,7 +204,7 @@ class _RecentFilesState extends State<RecentFiles> {
                         children: List.generate(
                           state.datafiltered!.length,
                           (index) => recentFileDataRow(
-                              state.datafiltered![index], "${index+1}"),
+                              state.datafiltered![index], "${index + 1}"),
                         ),
                       ),
                     ],
@@ -207,7 +254,9 @@ class _RecentFilesState extends State<RecentFiles> {
   Widget recentFileDataRow(TradeMarketingHeader fileInfo, index) {
     return Container(
       decoration: BoxDecoration(
-        color: (int.parse(index) % 2 == 0) ? Colors.white.withOpacity(0.2) : Colors.black.withOpacity(0.2),
+        color: (int.parse(index) % 2 == 0)
+            ? Colors.white.withOpacity(0.2)
+            : Colors.black.withOpacity(0.2),
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
@@ -223,34 +272,37 @@ class _RecentFilesState extends State<RecentFiles> {
             ),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.cardName??""),
+            child: CustomRawTableText(text: fileInfo.cardName ?? ""),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.vendedor??""),
+            child: CustomRawTableText(text: fileInfo.vendedor ?? ""),
           ),
           SizedBox(
             width: 120.0,
             child: CustomRawTableText(
-              text: ("${fileInfo.dateCreate}"!="")?DateFormat("dd/MM/yyyy").format(DateTime.parse(fileInfo.dateCreate!)):"",
+              text: ("${fileInfo.dateCreate}" != "")
+                  ? DateFormat("dd/MM/yyyy")
+                      .format(DateTime.parse(fileInfo.dateCreate!))
+                  : "",
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.direccion??""),
+            child: CustomRawTableText(text: fileInfo.direccion ?? ""),
           ),
           SizedBox(
-            width: 60.0,
+              width: 60.0,
               child: InkWell(
-            onTap: () {
-              widget.callback(
-                  fileInfo.docEntry, fileInfo.vendedor, fileInfo.direccion);
-            },
-            child: SvgPicture.asset(
-              Assets.iconsDocFile,
-              height: 30,
-              width: 30,
-            ),
-          )),
+                onTap: () {
+                  widget.callback(
+                      fileInfo.docEntry, fileInfo.vendedor, fileInfo.direccion);
+                },
+                child: SvgPicture.asset(
+                  Assets.iconsDocFile,
+                  height: 30,
+                  width: 30,
+                ),
+              )),
         ],
       ),
     );

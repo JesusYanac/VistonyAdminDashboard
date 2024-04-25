@@ -205,6 +205,19 @@ class _SearchFieldState extends State<SearchField> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: primaryColor,
+                              onPrimary: Colors.white,
+                              onSurface: primaryColor,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      locale: const Locale('es', 'ES'),
                     );
                     if (selectedDate != null) {
                       fini.text = "${selectedDate.toLocal()}".split(' ')[0];
@@ -234,6 +247,19 @@ class _SearchFieldState extends State<SearchField> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: primaryColor,
+                              onPrimary: Colors.white,
+                              onSurface: primaryColor,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      locale: const Locale('es', 'ES'),
                     );
                     if (selectedDate != null) {
                       ffin.text = "${selectedDate.toLocal()}".split(' ')[0];
