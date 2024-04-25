@@ -35,7 +35,8 @@ class _HeaderState extends State<Header> {
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
             if (state.isSearchBoxVisible) const Expanded(child: SearchField()),
-            const ProfileCard()
+            if (!state.isSearchBoxVisible) const Spacer(),
+              const ProfileCard()
           ],
         );
       }
@@ -211,7 +212,7 @@ class _SearchFieldState extends State<SearchField> {
                             colorScheme: const ColorScheme.light(
                               primary: primaryColor,
                               onPrimary: Colors.white,
-                              onSurface: primaryColor,
+                              onSurface: bgColor,
                             ),
                           ),
                           child: child!,
@@ -253,7 +254,7 @@ class _SearchFieldState extends State<SearchField> {
                             colorScheme: const ColorScheme.light(
                               primary: primaryColor,
                               onPrimary: Colors.white,
-                              onSurface: primaryColor,
+                              onSurface: bgColor,
                             ),
                           ),
                           child: child!,

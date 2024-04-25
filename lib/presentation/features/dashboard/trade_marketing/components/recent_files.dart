@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -117,7 +119,7 @@ class _RecentFilesState extends State<RecentFiles> {
                               return (headers[index].toLowerCase() == "fecha")
                                   ? Container(
                                       color: Colors.transparent,
-                                      width: 120,
+                                      width: 100,
                                       child: Text(
                                         headers[index].toUpperCase(),
                                         textAlign: TextAlign.center,
@@ -131,13 +133,14 @@ class _RecentFilesState extends State<RecentFiles> {
                                                   : Responsive.isTablet(context)
                                                       ? 12
                                                       : 14,
+                                          overflow: TextOverflow.ellipsis,
                                             ),
                                       ),
                                     )
                                   : (headers[index] == "N°" ||
                                           headers[index].toLowerCase() == " ")
                                       ? Container(
-                                          width: 60,
+                                          width: 40,
                                           color: Colors.transparent,
                                           child: Text(
                                             headers[index],
@@ -153,6 +156,7 @@ class _RecentFilesState extends State<RecentFiles> {
                                                               context)
                                                           ? 12
                                                           : 14,
+                                              overflow: TextOverflow.ellipsis,
                                                 ),
                                           ),
                                         )
@@ -173,6 +177,7 @@ class _RecentFilesState extends State<RecentFiles> {
                                                                   context)
                                                               ? 12
                                                               : 14,
+                                                  overflow: TextOverflow.ellipsis,
                                                     ),
                                               ),
                                               const SizedBox(width: 8,),
@@ -200,13 +205,22 @@ class _RecentFilesState extends State<RecentFiles> {
                           ),
                         ),
                       ),
-                      Column(
-                        children: List.generate(
-                          state.datafiltered!.length,
-                          (index) => recentFileDataRow(
-                              state.datafiltered![index], "${index + 1}"),
+                      Container(
+                        height: MediaQuery.of(context).size.height-294,
+                        decoration: const BoxDecoration(
+                          color: Colors.transparent,
                         ),
-                      ),
+                        child: ListView.builder(
+                          itemCount: state.datafiltered!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return recentFileDataRow(
+                              state.datafiltered![index],
+                              "${index + 1}",
+                            );
+                          },
+                        ),
+                      )
+,
                     ],
                   ),
                 );
@@ -265,7 +279,7 @@ class _RecentFilesState extends State<RecentFiles> {
       child: Row(
         children: [
           SizedBox(
-            width: 60.0,
+            width: 40.0,
             child: CustomRawTableText(
               text: index,
               textAlign: TextAlign.center,
@@ -278,7 +292,7 @@ class _RecentFilesState extends State<RecentFiles> {
             child: CustomRawTableText(text: fileInfo.vendedor ?? ""),
           ),
           SizedBox(
-            width: 120.0,
+            width: 100.0,
             child: CustomRawTableText(
               text: ("${fileInfo.dateCreate}" != "")
                   ? DateFormat("dd/MM/yyyy")
@@ -291,7 +305,7 @@ class _RecentFilesState extends State<RecentFiles> {
             child: CustomRawTableText(text: fileInfo.direccion ?? ""),
           ),
           SizedBox(
-              width: 60.0,
+              width: 40.0,
               child: InkWell(
                 onTap: () {
                   widget.callback(
