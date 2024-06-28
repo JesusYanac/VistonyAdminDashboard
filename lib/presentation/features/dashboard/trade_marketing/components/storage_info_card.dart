@@ -31,7 +31,16 @@ class StorageInfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
             width: 20,
-            child: SvgPicture.asset(svgSrc),
+            child: SvgPicture.asset(
+              svgSrc,
+              colorFilter: ColorFilter.mode(
+                  (title == "Sin Visitar")
+                      ? Colors.red
+                      : (title == "Visitadas")
+                          ? Colors.green
+                          : Colors.blue,
+                  BlendMode.srcIn),
+            ),
           ),
           Expanded(
             child: Padding(

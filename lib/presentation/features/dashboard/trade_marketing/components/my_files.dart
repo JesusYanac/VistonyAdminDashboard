@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../domain/models/my_files.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/controllers/responsive.dart';
-import 'file_info_card.dart';
+import '../bloc/trade_marketing_bloc.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({super.key});
@@ -61,17 +61,27 @@ class FileInfoCardGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: demoMyFiles.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: crossAxisCount,
-        crossAxisSpacing: defaultPadding,
-        mainAxisSpacing: defaultPadding,
-        childAspectRatio: childAspectRatio,
-      ),
-      itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index]),
+    return BlocBuilder<TradeMarketingBloc, TradeMarketingState>(
+      builder: (context, state) {
+        if (state is InitialTradeMarketingState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else{
+          return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 4,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: defaultPadding,
+              mainAxisSpacing: defaultPadding,
+              childAspectRatio: childAspectRatio,
+            ),
+            itemBuilder: (context, index) => Text(index.toString())/*FileInfoCard(info: state.myFiles[index])*/,
+          );
+        }
+      },
     );
   }
 }

@@ -3,6 +3,8 @@ import '../../data/repositories/repository_trade_marketing_impl.dart';
 
 class UseCaseTradeMarketing {
   Future<TradeMarketingEntity?> getTradeMarketing(String dateini, String datefin)async{
+
+    //logica
     return await RepositoryTradeMarketingImpl().getTradeMarketing(dateini, datefin);
   }
 

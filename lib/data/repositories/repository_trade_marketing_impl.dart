@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import '../../data/model/trade_marketing_model.dart';
 import '../../domain/repositories/repository_trade_marketing.dart';
-import 'package:http/http.dart' as http;
 
 class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
+  //var proxyUrl = 'https://cors-anywhere.herokuapp.com/http://190.12.79.135:8060/get/api/TradeMarketing/Get';
   var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   @override
   Future<TradeMarketingEntity?> getTradeMarketing(String dateini, String datefin) async {
@@ -18,7 +18,7 @@ class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
       var queryParams = 'DateStart=$dateini&DateFinish=$datefin';
 
       // Construir la URL completa con los parámetros
-      var url = Uri.parse('$proxyUrl$apiUrl?$queryParams');
+      var url = Uri.parse('${kIsWeb?proxyUrl:""}$apiUrl?$queryParams');
       debugPrint(url.toString());
       var response = await http.get(url);
       debugPrint("response: ${response.body}");
@@ -45,7 +45,7 @@ class RepositoryTradeMarketingImpl implements RepositoryTradeMarketing {
     try {
       var apiUrl =
           'http://190.12.79.135:8060/get/api/TradeMarketing/GetEncuesta?DocEntry=$docEntry';
-      var url = Uri.parse(proxyUrl + apiUrl);
+      var url = Uri.parse("${kIsWeb?proxyUrl:""}$apiUrl");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsondata = jsonDecode(response.body)[0];

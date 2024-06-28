@@ -7,7 +7,13 @@ import 'chart.dart';
 import 'storage_info_card.dart';
 
 class StorageDetails extends StatefulWidget {
-  const StorageDetails({super.key});
+  const StorageDetails({super.key,
+    required this.value,
+    required this.total
+  });
+
+  final int value;
+  final int total;
 
   @override
   State<StorageDetails> createState() => _StorageDetailsState();
@@ -16,6 +22,10 @@ class StorageDetails extends StatefulWidget {
 class _StorageDetailsState extends State<StorageDetails> {
   @override
   Widget build(BuildContext context) {
+
+    double value1 = widget.value / widget.total;
+    double roundedValue1 = double.parse((value1 * 100).toStringAsFixed(1));
+    double roundedValue2 = 100 - roundedValue1;
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Container(
@@ -35,30 +45,34 @@ class _StorageDetailsState extends State<StorageDetails> {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              const Chart(),
-              const StorageInfoCard(
-                svgSrc: "assets/icons/Documents.svg",
-                title: "Documents Files",
-                amountOfFiles: "1.3GB",
-                numOfFiles: 1328,
+              PieChartForTwoValues(
+                value: widget.value,
+                total: widget.total,
               ),
-              const StorageInfoCard(
+              StorageInfoCard(
+                svgSrc: "assets/icons/Documents.svg",
+                title: "Visitadas",
+                amountOfFiles: "$roundedValue1%",
+                numOfFiles: widget.value,
+              ),
+              /*const StorageInfoCard(
                 svgSrc: "assets/icons/media.svg",
                 title: "Media Files",
                 amountOfFiles: "15.3GB",
                 numOfFiles: 1328,
-              ),
-              const StorageInfoCard(
-                svgSrc: "assets/icons/folder.svg",
-                title: "Other Files",
-                amountOfFiles: "1.3GB",
-                numOfFiles: 1328,
-              ),
-              const StorageInfoCard(
+              ),*/
+              StorageInfoCard(
                 svgSrc: "assets/icons/unknown.svg",
-                title: "Unknown",
-                amountOfFiles: "1.3GB",
-                numOfFiles: 140,
+                title: "Sin Visitar",
+                amountOfFiles: "$roundedValue2%",
+                numOfFiles: widget.total - widget.value,
+              ),
+              StorageInfoCard(
+                svgSrc: "assets/icons/folder.svg",
+                title: "Total de Visitas",
+                amountOfFiles: "100%",
+
+                numOfFiles: widget.total,
               ),
             ],
           ),

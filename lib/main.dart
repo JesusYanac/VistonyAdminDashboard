@@ -57,10 +57,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('es', 'ES'),
       ],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: const WelcomeScreen(),
     );
   }

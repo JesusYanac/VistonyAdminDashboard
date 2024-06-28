@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:rive/rive.dart';
-import 'package:vistony_admin_dashboard/presentation/core/controllers/responsive.dart';
 
 import '../../../../../data/model/trade_marketing_model.dart';
 import '../../../../../generated/assets.dart';
 import '../../../../core/constants.dart';
+import '../../../../core/controllers/responsive.dart';
 import '../bloc/trade_marketing_bloc.dart';
 
 class RecentFiles extends StatefulWidget {
@@ -24,13 +23,14 @@ class RecentFiles extends StatefulWidget {
 class _RecentFilesState extends State<RecentFiles> {
   final List<String> headers = [
     "N°",
-    "Cliente",
+    "Sucursal",
     "Vendedor",
-    "Fecha",
+    "Cliente",
     "Dirección",
-    " "
+    "Fecha",
+    "Detalle"
   ];
-  final List<bool> selectedCheck = [false, false, false, false, false, false];
+  final List<bool> selectedCheck = [true, true, true, true, true, true];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,7 +86,10 @@ class _RecentFilesState extends State<RecentFiles> {
                 child: ElevatedButton(
                   onPressed: () {
                     BlocProvider.of<TradeMarketingBloc>(context)
-                        .reloadTradeMarketing();
+                        .filterByDateTradeMarketing(
+                      DateTime.now().toString().split(" ").first.toString(),
+                      DateTime.now().toString().split(" ").first.toString()
+                    );
                   },
                   child: Text(
                     "Hoy",
@@ -119,7 +122,7 @@ class _RecentFilesState extends State<RecentFiles> {
                               return (headers[index].toLowerCase() == "fecha")
                                   ? Container(
                                       color: Colors.transparent,
-                                      width: 100,
+                                      width: (kIsWeb)?100:80,
                                       child: Text(
                                         headers[index].toUpperCase(),
                                         textAlign: TextAlign.center,
@@ -137,9 +140,8 @@ class _RecentFilesState extends State<RecentFiles> {
                                             ),
                                       ),
                                     )
-                                  : (headers[index] == "N°" ||
-                                          headers[index].toLowerCase() == " ")
-                                      ? Container(
+                                  : ( headers[index] == "N°" || headers[index].toLowerCase() == " ")
+                                      ? ((kIsWeb)?Container(
                                           width: 40,
                                           color: Colors.transparent,
                                           child: Text(
@@ -159,9 +161,9 @@ class _RecentFilesState extends State<RecentFiles> {
                                               overflow: TextOverflow.ellipsis,
                                                 ),
                                           ),
-                                        )
+                                        ):Container())
                                       : Expanded(
-                                          child: Row(
+                                          child: (kIsWeb)?Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
@@ -181,7 +183,7 @@ class _RecentFilesState extends State<RecentFiles> {
                                                     ),
                                               ),
                                               const SizedBox(width: 8,),
-                                              Checkbox(
+                                              /*Checkbox(
                                                 value: selectedCheck[index],
                                                 onChanged: (value) {
 
@@ -197,6 +199,51 @@ class _RecentFilesState extends State<RecentFiles> {
                                                   });
                                                   BlocProvider.of<TradeMarketingBloc>(context).setFilter(headers[index]);
                                                 },
+                                              ),*/
+                                            ],
+                                          ):Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                headers[index].toUpperCase(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                  fontSize: Responsive.isMobile(
+                                                      context)
+                                                      ? 10
+                                                      : Responsive.isTablet(
+                                                      context)
+                                                      ? 12
+                                                      : 14,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8,),
+                                              Container(
+                                                margin: EdgeInsets.zero,
+                                                padding: EdgeInsets.zero,
+                                                child: Checkbox(
+                                                  value: selectedCheck[index],
+                                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                                  onChanged: (value) {
+
+                                                    //poner todos en falso y cambiar el estado solo del que se esta seleccionando
+                                                    setState(() {
+                                                      for (int i = 0; i < selectedCheck.length; i++) {
+                                                        if (i == index) {
+                                                          selectedCheck[i] = value!;
+                                                        } else {
+                                                          selectedCheck[i] = false;
+                                                        }
+                                                      }
+                                                    });
+                                                    BlocProvider.of<TradeMarketingBloc>(context).setFilter(headers[index]);
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -212,6 +259,7 @@ class _RecentFilesState extends State<RecentFiles> {
                         ),
                         child: ListView.builder(
                           itemCount: state.datafiltered!.length,
+                          physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
                             return recentFileDataRow(
                               state.datafiltered![index],
@@ -278,6 +326,7 @@ class _RecentFilesState extends State<RecentFiles> {
       padding: const EdgeInsets.all(defaultPadding),
       child: Row(
         children: [
+          if(kIsWeb)
           SizedBox(
             width: 40.0,
             child: CustomRawTableText(
@@ -286,13 +335,22 @@ class _RecentFilesState extends State<RecentFiles> {
             ),
           ),
           Expanded(
-            child: CustomRawTableText(text: fileInfo.cardName ?? ""),
+            child: CustomRawTableText(text: "Sucursal"),
           ),
           Expanded(
             child: CustomRawTableText(text: fileInfo.vendedor ?? ""),
           ),
-          SizedBox(
-            width: 100.0,
+          Expanded(
+            child: CustomRawTableText(text: fileInfo.cardName ?? ""),
+          ),
+          Expanded(
+            child: CustomRawTableText(text: fileInfo.direccion ?? ""),
+          ),
+          Expanded(
+            child: CustomRawTableText(text:"01/01/1990"),
+          ),
+          /*SizedBox(
+            width: (kIsWeb)?100:80,
             child: CustomRawTableText(
               text: ("${fileInfo.dateCreate}" != "")
                   ? DateFormat("dd/MM/yyyy")
@@ -300,10 +358,9 @@ class _RecentFilesState extends State<RecentFiles> {
                   : "",
               textAlign: TextAlign.center,
             ),
-          ),
-          Expanded(
-            child: CustomRawTableText(text: fileInfo.direccion ?? ""),
-          ),
+          ),*/
+
+          if(kIsWeb)
           SizedBox(
               width: 40.0,
               child: InkWell(
@@ -331,10 +388,12 @@ class CustomRawTableText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      kIsWeb?text:text.toLowerCase(),
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.bodySmall,
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+        fontSize: kIsWeb?12:10
+      ),
       textAlign: textAlign ?? TextAlign.start,
     );
   }

@@ -5,13 +5,13 @@ import '../../../../generated/assets.dart';
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   List<Map<String, dynamic>> titles = [
     {"title": "Trade Marketing", "svgSrc": Assets.iconsMenuDashboard, "index": 0},
-    {"title": "Transaction", "svgSrc": Assets.iconsMenuTran, "index": 1},
+    /*{"title": "Transaction", "svgSrc": Assets.iconsMenuTran, "index": 1},
     {"title": "Task", "svgSrc": Assets.iconsMenuTask, "index": 2},
     {"title": "Documents", "svgSrc": Assets.iconsMenuDoc, "index": 3},
     {"title": "Store", "svgSrc": Assets.iconsMenuStore, "index": 4},
     {"title": "Notification", "svgSrc": Assets.iconsMenuNotification, "index": 5},
     {"title": "Profile", "svgSrc": Assets.iconsMenuProfile, "index": 6},
-    {"title": "Settings", "svgSrc": Assets.iconsMenuSetting, "index": 7},
+    {"title": "Settings", "svgSrc": Assets.iconsMenuSetting, "index": 7},*/
   ];
   NavigationBloc() : super(NavigationState(
     title: "Trade Marketing",

@@ -51,14 +51,15 @@ class FileInfoCard extends StatelessWidget {
             percentage: info.percentage,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "${info.numOfFiles} Files",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white70),
+              Expanded(
+                child: Text(
+                  "${info.numOfFiles} ${info.title=="PDVs"?"Sitios" :"Docs"}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.white70),
+                ),
               ),
               Text(
                 info.totalStorage!,
@@ -99,7 +100,7 @@ class ProgressLine extends StatelessWidget {
         ),
         LayoutBuilder(
           builder: (context, constraints) => Container(
-            width: constraints.maxWidth * (percentage! / 100),
+            width: constraints.maxWidth * (getvaluePercentaje(percentage) / 100),
             height: 5,
             decoration: BoxDecoration(
               color: color,
@@ -109,5 +110,15 @@ class ProgressLine extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  getvaluePercentaje(int? percentage) {
+    if (percentage! < 0) {
+      return 0;
+    } else if (percentage > 100) {
+      return 100;
+    } else {
+      return percentage;
+    }
   }
 }
