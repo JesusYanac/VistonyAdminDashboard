@@ -49,7 +49,7 @@ class _MyFilesState extends State<MyFiles> {
 class FileInfoCardGridView extends StatefulWidget {
   const FileInfoCardGridView({
     super.key,
-    this.crossAxisCount = 4,
+    this.crossAxisCount = 3,
     this.childAspectRatio = 1,
   });
 
@@ -67,45 +67,52 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
     return BlocBuilder<TradeMarketingBloc, TradeMarketingState>(
       builder: (context, state) {
         if(state is SuccessTradeMarketingState){
-          int numOfFiles = state.datafiltered!.length;
+          int numOfFiles = state.data!.length;
           if(numOfFiles > 0){
-            int differentNames = Set.from(state.datafiltered!.map((persona) => persona.vendedor)).length;
-            int locations = Set.from(state.datafiltered!.map((persona) => persona.direccion)).length;
-            int totalDocs = differentNames*5;
+            int sucursales = Set.from(state.datafiltered!.map((s) => s.sucursal)).length;
+            int numdays = state.ffin.difference(state.fini).inDays+1;
+            int totalDocs = sucursales*5*5*numdays; // 5 documentos x 5 vendedores x 5 dias
+
+            //limitar a dos decimales
+            int efectivity = state.datafiltered!.length;
+
+            int activeVendors = Set.from(state.datafiltered!.where((e) => e.trade == "Y").map((s) => s.vendedor)).length;
+            int totalVendors = Set.from(state.datafiltered!.map((s) => s.vendedor)).length;
+
 
             List demoMyFiles = [
               CloudStorageInfo(
-                title: "Total",
+                title: "Total General",
                 numOfFiles: totalDocs,
                 svgSrc: "assets/icons/Documents.svg",
                 totalStorage: "100%",
                 color: primaryColor,
-                percentage: 100,
+                percentage: totalDocs,
               ),
               CloudStorageInfo(
-                title: "Realizados",
-                numOfFiles: numOfFiles,
+                title: "Efectividad",
+                numOfFiles: totalDocs,
                 svgSrc: "assets/icons/google_drive.svg",
-                totalStorage: "${numOfFiles*100~/totalDocs}%",
+                totalStorage: "$efectivity%",
                 color: const Color(0xFFFFA113),
-                percentage: numOfFiles*100~/totalDocs,
+                percentage:  efectivity * 100 ~/ totalDocs,
               ),
               CloudStorageInfo(
-                title: "Faltantes",
-                numOfFiles: totalDocs-numOfFiles,
+                title: "Vendedores Activos",
+                numOfFiles: activeVendors,
                 svgSrc: "assets/icons/one_drive.svg",
-                totalStorage: "${(totalDocs-numOfFiles)*100~/totalDocs}%",
+                totalStorage: "100%",
                 color: const Color(0xFFA4CDFF),
-                percentage: (totalDocs-numOfFiles)*100~/totalDocs,
+                percentage: activeVendors*100~/totalVendors,
               ),
-              CloudStorageInfo(
+              /*CloudStorageInfo(
                 title: "PDVs",
                 numOfFiles: locations,
                 svgSrc: "assets/icons/drop_box.svg",
                 totalStorage: "100%",
                 color: const Color(0xFF007EE5),
                 percentage: 100,
-              ),
+              ),*/
             ];
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),

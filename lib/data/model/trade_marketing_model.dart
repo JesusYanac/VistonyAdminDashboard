@@ -17,40 +17,47 @@ class TradeMarketingEntity {
     return 'TradeMarketingEntity{status: $status, data: $data}';
   }
 }
+
 class TradeMarketingHeader {
-  final String docEntry;
-  final String? cardCode;
-  final String? cardName;
-  final String? dateCreate;
-  final String? direccion;
+  final String sucursal;
+  final String? fecha;
   final String? vendedor;
+  final String? cardCode;
+  final String? cliente;
+  final String? direccion;
+  final String? trade;
+  final String? docEntry;
 
   TradeMarketingHeader({
-    required this.docEntry,
-    required this.cardCode,
-    required this.cardName,
-    required this.dateCreate,
-    required this.direccion,
-    required this.vendedor,
+    this.sucursal = "",
+    this.vendedor = "",
+    this.cardCode = "",
+    this.cliente = "",
+    this.direccion = "",
+    this.trade = "",
+    this.docEntry = "",
+    this.fecha = "",
   });
 
   factory TradeMarketingHeader.fromJson(Map<String, dynamic> json) {
     return TradeMarketingHeader(
-      docEntry: json['DocEntry']??"",
-      cardCode: json['CardCode']??"",
-      cardName: json['CardName']??"",
-      dateCreate: json['DateCreate']??"",
-      direccion: json['Direccion']??"",
-      vendedor: json['Vendedor']??"",
+      sucursal: json['Sucursal'] ?? "",
+      vendedor: json['Vendedor'] ?? "",
+      cardCode: json['CardCode'] ?? "",
+      cliente: json['Cliente'] ?? "",
+      direccion: json['Direccion'] ?? "",
+      trade: json['Trade'] ?? "",
+      docEntry: json['DocEntry'] ?? "",
+      fecha: json['Fecha'] ?? "",
     );
   }
 
   @override
   String toString() {
-    return 'TradeMarketingHeader{docEntry: $docEntry, cardCode: $cardCode, cardName: $cardName, dateCreate: $dateCreate, direccion: $direccion, vendedor: $vendedor}';
+    return 'TradeMarketingHeader{Sucursal: $sucursal, Fecha: $fecha, Vendedor: $vendedor, CardCode: $cardCode, Cliente: $cliente, Direccion: $direccion, Trade: $trade, DocEntry: $docEntry}';
   }
-}
 
+}
 
 class TradeMarketingPageModel {
   int id;
@@ -83,8 +90,7 @@ class TradeMarketingPageModel {
       idDocument: json['IdDocument'] ?? "0",
       chkrecibido: json['chkrecibido'] ?? "N",
       sectionList: List<TradeMarketingSection>.from(
-          json['Section']?.map((x) => TradeMarketingSection.fromJson(x)) ??
-              []),
+          json['Section']?.map((x) => TradeMarketingSection.fromJson(x)) ?? []),
       dateCreation: json['DateCreation'] ?? "",
       dateCompletion: json['DateCompletion'] ?? "",
       imei: json['Imei'] ?? "",
@@ -121,9 +127,9 @@ class TradeMarketingSection {
     return TradeMarketingSection(
       id: json['id'] ?? 0,
       idDocument: json['IdDocument'] ?? "0",
-      subSectionList: List<TradeMarketingSubSection>.from(
-          json['SubSeccion']?.map((x) => TradeMarketingSubSection.fromJson(x)) ??
-              []),
+      subSectionList: List<TradeMarketingSubSection>.from(json['SubSeccion']
+              ?.map((x) => TradeMarketingSubSection.fromJson(x)) ??
+          []),
       description: json['U_Descr'] ?? "",
       file: json['U_File'] ?? 0,
       order: json['U_Order'] ?? "0",
@@ -157,8 +163,7 @@ class TradeMarketingSubSection {
       idDocument: json['IdDocument'] ?? "0",
       docEntry: json['DocEntry'] ?? 0,
       formList: List<TradeMarketingForm>.from(
-          json['Formulario']?.map((x) => TradeMarketingForm.fromJson(x)) ??
-              []),
+          json['Formulario']?.map((x) => TradeMarketingForm.fromJson(x)) ?? []),
       tituloSubSeccion: json['Titulo_SubSeccion'] ?? "",
     );
   }
