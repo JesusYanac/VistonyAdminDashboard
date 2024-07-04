@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/controllers/menu_app_controller.dart';
@@ -31,9 +32,17 @@ class _HeaderState extends State<Header> {
                 onPressed: context.read<MenuAppController>().controlMenu,
               ),
             if (!Responsive.isMobile(context))
-              Text(
-                state.title.toUpperCase(),
-                style: Theme.of(context).textTheme.titleLarge,
+              Row(
+                children: [
+                  Text(
+                    state.title.toUpperCase(),
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  InkWell( onTap: solicitarAcceso, child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Solicitar Acceso", style: TextStyle(color: primaryColor),),
+                  ))
+                ],
               ),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
@@ -45,6 +54,16 @@ class _HeaderState extends State<Header> {
       }
     );
   }
+
+  void solicitarAcceso() async {
+    const url = 'https://cors-anywhere.herokuapp.com/http://190.12.79.135:8060/get/api/TradeMarketing/Get?DateStart=20240704&DateFinish=20240704';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'No se puede lanzar $url';
+    }
+  }
+
 }
 
 class ProfileCard extends StatelessWidget {

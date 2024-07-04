@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:vistony_admin_dashboard/presentation/core/controllers/menu_app_controller.dart';
+import 'package:vistony_admin_dashboard/presentation/features/dashboard/bloc/navigation_bloc.dart';
+import 'package:vistony_admin_dashboard/presentation/features/dashboard/main_screen.dart';
+import 'package:vistony_admin_dashboard/presentation/features/dashboard/trade_marketing/bloc/trade_marketing_bloc.dart';
+import 'package:vistony_admin_dashboard/presentation/features/dashboard/trade_marketing/trade_marketing_screen.dart';
 import 'presentation/core/constants.dart';
 import 'presentation/features/auth/Welcome/welcome_screen.dart';
 void main() {
@@ -58,7 +65,28 @@ class MyApp extends StatelessWidget {
         Locale('es', 'ES'),
       ],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      home: const WelcomeScreen(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => MenuAppController(),
+          ),
+        ],
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => NavigationBloc(),
+            ),
+            BlocProvider(
+              create: (context){
+                final bloc = TradeMarketingBloc();
+                bloc.reloadTradeMarketing();
+                return bloc;
+              },
+            )
+          ],
+          child: const MainScreen(),
+        ),
+      ),
     );
   }
 }
