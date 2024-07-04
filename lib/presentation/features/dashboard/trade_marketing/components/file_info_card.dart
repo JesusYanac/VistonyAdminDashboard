@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../domain/models/my_files.dart';
 import '../../../../core/constants.dart';
+import '../bloc/trade_marketing_bloc.dart';
 
 class FileInfoCard extends StatelessWidget {
   const FileInfoCard({super.key, required this.info});
@@ -54,19 +56,36 @@ class FileInfoCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  "${info.numOfFiles} ${info.title=="PDVs"?"Sitios" :"Docs"}",
+                  "${info.numOfFiles} ${info.title == "Vendedores Activos" ? "Vendedores" : "Docs"}",
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!
                       .copyWith(color: Colors.white70),
                 ),
               ),
-              Text(
-                info.totalStorage!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white),
+              Expanded(
+                child: Text(
+                  info.totalStorage!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Expanded(
+                child: BlocBuilder<TradeMarketingBloc, TradeMarketingState>(
+                  builder: (context, state) {
+                    return Text(
+                      "${info.title == "Total General" ? Set.from(state.datafilteredfull!.map((e) => "${e.vendedor}${e.fecha}")).length * 5 : (info.title == "Efectividad" ? Set.from(state.datafilteredfull!.map((e) => "${e.vendedor}${e.fecha}")).length * 5 : (info.title == "Vendedores Activos" ? Set.from(state.datafilteredfull!.map((e) => e.vendedor)).length : 0))}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white),
+                      textAlign: TextAlign.right,
+                    );
+                  },
+                ),
               ),
             ],
           )
@@ -100,7 +119,8 @@ class ProgressLine extends StatelessWidget {
         ),
         LayoutBuilder(
           builder: (context, constraints) => Container(
-            width: constraints.maxWidth * (getvaluePercentaje(percentage) / 100),
+            width:
+                constraints.maxWidth * (getvaluePercentaje(percentage) / 100),
             height: 5,
             decoration: BoxDecoration(
               color: color,

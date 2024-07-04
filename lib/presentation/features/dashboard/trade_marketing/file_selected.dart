@@ -553,6 +553,46 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                         ],
                       ),
                     ),
+                  if (element.questionList!
+                          .where((e) => e.description == "Facing Vistony")
+                          .isNotEmpty &&
+                      element.questionList!
+                          .where((e) => e.description == "Facing Total")
+                          .isNotEmpty)
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            "% Facing",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                              "${int.parse(element.questionList?.where((e) => e.description == "Facing Vistony").first.responsevalue ?? "0") * 100 ~/ int.parse(element.questionList?.where((e) => e.description == "Facing Total").first.responsevalue ?? "1")}%"),
+                        ],
+                      ),
+                    ),
+                  if (element.questionList!
+                          .where((e) => e.description == "Niveles Vistony")
+                          .isNotEmpty &&
+                      element.questionList!
+                          .where((e) => e.description == "Niveles Total")
+                          .isNotEmpty)
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Text(
+                            "% Niveles",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                              "${int.parse(element.questionList?.where((e) => e.description == "Niveles Vistony").first.responsevalue ?? "0") * 100 ~/ int.parse(element.questionList?.where((e) => e.description == "Niveles Total").first.responsevalue ?? "1")}%"),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -577,22 +617,27 @@ class _FormElementTradeMarketingState extends State<FormElementTradeMarketing> {
                     : MediaQuery.of(context).size.width * 0.9,
             color: bgColor,
             child: // imagen con loading builder
-            CachedNetworkImage(
+                CachedNetworkImage(
               imageUrl: "https://cors-anywhere.herokuapp.com/$url",
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.2),
-                      child: LinearProgressIndicator(
-                        backgroundColor: primaryColor2, // Fondo gris
-                        valueColor: const AlwaysStoppedAnimation<Color>(primaryColor), // Color de carga rojo
-                        value: downloadProgress.progress,
-                      ),
-                    ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.2),
+                  child: LinearProgressIndicator(
+                    backgroundColor: primaryColor2, // Fondo gris
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        primaryColor), // Color de carga rojo
+                    value: downloadProgress.progress,
                   ),
-              errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
-            )
-,
+                ),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                  child: Icon(
+                Icons.error,
+                size: 200,
+              )),
+            ),
           ),
           title: Text(title,
               style: Theme.of(context)

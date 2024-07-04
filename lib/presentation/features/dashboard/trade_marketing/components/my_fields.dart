@@ -9,13 +9,40 @@ import 'file_info_card.dart';
 class MyFiles extends StatefulWidget {
   const MyFiles({
     super.key,
+    required this.headers,
+    required this.searchText,
+    required this.updateHeaders,
+    required this.updateSearchText,
   });
+
+  final Map<String,bool> headers;
+  final String searchText;
+  final Function updateHeaders;
+  final Function updateSearchText;
 
   @override
   State<MyFiles> createState() => _MyFilesState();
 }
 
 class _MyFilesState extends State<MyFiles> {
+  late Map<String,bool> headers;
+  late String searchText;
+  @override
+  void initState() {
+    headers = widget.headers;
+    searchText = widget.searchText;
+    super.initState();
+  }
+  @override
+  void didUpdateWidget(covariant MyFiles oldWidget) {
+    if(widget.headers != headers || widget.searchText != searchText) {
+      setState(() {
+        headers = widget.headers;
+        searchText = widget.searchText;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -45,7 +72,6 @@ class _MyFilesState extends State<MyFiles> {
     );
   }
 }
-
 class FileInfoCardGridView extends StatefulWidget {
   const FileInfoCardGridView({
     super.key,
@@ -61,59 +87,50 @@ class FileInfoCardGridView extends StatefulWidget {
 }
 
 class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TradeMarketingBloc, TradeMarketingState>(
       builder: (context, state) {
-        if(state is SuccessTradeMarketingState){
-          int numOfFiles = state.data!.length;
-          if(numOfFiles > 0){
-            int sucursales = Set.from(state.datafiltered!.map((s) => s.sucursal)).length;
-            int numdays = state.ffin.difference(state.fini).inDays+1;
-            int totalDocs = sucursales*5*5*numdays; // 5 documentos x 5 vendedores x 5 dias
+        if (state is SuccessTradeMarketingState) {
+          var filteredData = state.datafilteredfull;
 
-            //limitar a dos decimales
-            int efectivity = state.datafiltered!.length;
+          int numTotalOfFiles = Set.from(filteredData!.map((e) => "${e.vendedor}${e.fecha}")).length*5;
 
-            int activeVendors = Set.from(state.datafiltered!.where((e) => e.trade == "Y").map((s) => s.vendedor)).length;
-            int totalVendors = Set.from(state.datafiltered!.map((s) => s.vendedor)).length;
+          if (numTotalOfFiles > 0) {
+            //int numCurrentFiles = Set.from(state.datafiltered!.map((e) => "${e.direccion}${e.fecha}")).length;
+            int numCurrentFiles = state.datafiltered!.length;
+            int numCurrentSucursal = Set.from(state.datafiltered!.map((e) => e.sucursal)).length;
+            int numTotalSucursal = Set.from(filteredData.map((e) => e.sucursal)).length;
+            int numTotalVendedor = Set.from(filteredData.map((e) => e.vendedor)).length;
+            int numActualVendedor = Set.from(state.datafiltered!.map((e) => e.vendedor)).length;
 
-
-            List demoMyFiles = [
+            final List<CloudStorageInfo> demoMyFiles = [
               CloudStorageInfo(
                 title: "Total General",
-                numOfFiles: totalDocs,
+                numOfFiles: numTotalOfFiles,
                 svgSrc: "assets/icons/Documents.svg",
                 totalStorage: "100%",
                 color: primaryColor,
-                percentage: totalDocs,
+                percentage: 100,
               ),
               CloudStorageInfo(
                 title: "Efectividad",
-                numOfFiles: totalDocs,
+                numOfFiles: numCurrentFiles,
                 svgSrc: "assets/icons/google_drive.svg",
-                totalStorage: "$efectivity%",
+                totalStorage: "${numCurrentFiles * 100 ~/ numTotalOfFiles}%",
                 color: const Color(0xFFFFA113),
-                percentage:  efectivity * 100 ~/ totalDocs,
+                percentage: numCurrentFiles * 100 ~/ numTotalOfFiles,
               ),
               CloudStorageInfo(
                 title: "Vendedores Activos",
-                numOfFiles: activeVendors,
+                numOfFiles: numActualVendedor,
                 svgSrc: "assets/icons/one_drive.svg",
-                totalStorage: "100%",
+                totalStorage: "${numActualVendedor * 100 ~/ numTotalVendedor}%",
                 color: const Color(0xFFA4CDFF),
-                percentage: activeVendors*100~/totalVendors,
+                percentage: numActualVendedor * 100 ~/ numTotalVendedor,
               ),
-              /*CloudStorageInfo(
-                title: "PDVs",
-                numOfFiles: locations,
-                svgSrc: "assets/icons/drop_box.svg",
-                totalStorage: "100%",
-                color: const Color(0xFF007EE5),
-                percentage: 100,
-              ),*/
             ];
+
             return GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -124,12 +141,14 @@ class _FileInfoCardGridViewState extends State<FileInfoCardGridView> {
                 mainAxisSpacing: defaultPadding,
                 childAspectRatio: widget.childAspectRatio,
               ),
-              itemBuilder: (context, index) => FileInfoCard(info: demoMyFiles[index]),
+              itemBuilder: (context, index) =>
+                  FileInfoCard(info: demoMyFiles[index]),
             );
-          }else{
+          }
+          else {
             return Container();
           }
-        }else{
+        } else {
           return const Center(
             child: CircularProgressIndicator(),
           );

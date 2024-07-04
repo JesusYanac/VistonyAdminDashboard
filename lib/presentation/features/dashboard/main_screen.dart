@@ -19,6 +19,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +45,10 @@ class _MainScreenState extends State<MainScreen> {
                   padding: const EdgeInsets.all(defaultPadding),
                   child: ListView(
                     children: [
-                      const Header(),
+                      Header( searchController: searchController,),
                       const SizedBox(height: defaultPadding),
                       switch (state.index) {
-                        0 => const TradeMarketingScreen(),
+                        0 => TradeMarketingScreen(searchController: searchController,),
                         _ => const PageUnderConstruction(),
                       },
                     ],

@@ -11,7 +11,19 @@ import '../../../../core/controllers/responsive.dart';
 import '../bloc/trade_marketing_bloc.dart';
 
 class RecentFiles extends StatefulWidget {
-  const RecentFiles({super.key, required this.callback});
+  const RecentFiles({
+    super.key,
+    required this.callback,
+    required this.headers,
+    required this.searchText,
+    required this.updateHeaders,
+    required this.updateSearchText,
+  });
+
+  final Map<String, bool> headers;
+  final String searchText;
+  final Function updateHeaders;
+  final Function updateSearchText;
 
   final Function callback;
 
@@ -20,16 +32,27 @@ class RecentFiles extends StatefulWidget {
 }
 
 class _RecentFilesState extends State<RecentFiles> {
-  final Map<String, bool> headers = {
-    "N°": false,
-    "Sucursal": false,
-    "Vendedor": false,
-    "Cliente": false,
-    "Dirección": false,
-    "Fecha": true,
-    "DOC": false,
-  };
 
+  late Map<String, bool> headers;
+  late String searchText;
+
+  @override
+  void initState() {
+    headers = widget.headers;
+    searchText = widget.searchText;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant RecentFiles oldWidget) {
+    if(widget.headers != headers || widget.searchText != searchText) {
+      setState(() {
+        headers = widget.headers;
+        searchText = widget.searchText;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,6 +109,17 @@ class _RecentFilesState extends State<RecentFiles> {
                 DateTime.now().toString().split(" ").first,
                 DateTime.now().toString().split(" ").first,
               );
+
+              setState(() {
+                // limpiar header
+                headers.forEach((key, value) {
+                  headers[key] = false;
+                });
+                headers["Fecha"] = true;
+              });
+
+              widget.updateHeaders(headers);
+              widget.updateSearchText("");
             },
             child: Text(
               "Hoy",
@@ -261,12 +295,15 @@ class _RecentFilesState extends State<RecentFiles> {
   }
 
   void setHeader(String header) {
+
+    widget.updateSearchText("");
     setState(() {
       // solo true el header actual
       headers.forEach((key, value) {
         if (key == header) {
           headers[key] = true;
           BlocProvider.of<TradeMarketingBloc>(context).setFilter(header);
+          BlocProvider.of<TradeMarketingBloc>(context).filterTradeMarketing("");
         } else {
           headers[key] = false;
         }

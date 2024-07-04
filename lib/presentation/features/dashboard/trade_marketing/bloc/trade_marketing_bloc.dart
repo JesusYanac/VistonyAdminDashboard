@@ -10,6 +10,7 @@ class TradeMarketingBloc
       : super(InitialTradeMarketingState(
           data: [],
           datafiltered: [],
+          datafilteredfull: [],
           header: "",
           fini: DateTime.now(),
           ffin: DateTime.now(),
@@ -18,6 +19,7 @@ class TradeMarketingBloc
       emit(LoadingTradeMarketingState(
         data: [],
         datafiltered: [],
+        datafilteredfull: [],
         header: state.header,
         fini: state.fini,
         ffin: state.ffin,
@@ -43,10 +45,12 @@ class TradeMarketingBloc
           value.data != null &&
           value.data!.isNotEmpty &&
           value.status != "N") {
-        var datafiltered = value.data!.where((element) => element.trade == "Y").toList();
+        var datafiltered =
+            value.data!.where((element) => element.trade == "Y").toList();
         emit(SuccessTradeMarketingState(
           data: value.data,
           datafiltered: datafiltered,
+          datafilteredfull: value.data,
           header: state.header,
           fini: DateTime(DateTime.now().year, DateTime.now().month, 1),
           ffin: DateTime.now(),
@@ -55,6 +59,7 @@ class TradeMarketingBloc
         emit(ErrorTradeMarketingState(
           data: [],
           datafiltered: [],
+          datafilteredfull: [],
           header: state.header,
           fini: DateTime(DateTime.now().year, DateTime.now().month, 1),
           ffin: DateTime.now(),
@@ -66,7 +71,8 @@ class TradeMarketingBloc
       debugPrint("state.header ${state.header}");
 
       // Helper function to filter data based on a given field
-      List<TradeMarketingHeader>? filterData(String? Function(TradeMarketingHeader) getField) {
+      List<TradeMarketingHeader>? filterData(
+          String? Function(TradeMarketingHeader) getField) {
         if (data != null && event.value.isNotEmpty) {
           return data.where((element) {
             final fieldValue = getField(element) ?? "";
@@ -77,20 +83,26 @@ class TradeMarketingBloc
       }
 
       // Map headers to their respective fields
-      final Map<String, String? Function(TradeMarketingHeader)> headerFieldMap = {
+      final Map<String, String? Function(TradeMarketingHeader)> headerFieldMap =
+          {
         "Vendedor": (element) => element.vendedor,
         "Cliente": (element) => element.cliente,
         "Dirección": (element) => element.direccion,
-        "Sucursal": (element) => element.sucursal, // Añadido filtro por "Sucursal"
+        "Sucursal": (element) =>
+            element.sucursal, // Añadido filtro por "Sucursal"
       };
 
       // Get the field accessor based on the current header, or null if no match
       final fieldAccessor = headerFieldMap[state.header];
 
+      final datafilteredfull = filterData(fieldAccessor!);
 
       emit(SuccessTradeMarketingState(
         data: data,
-        datafiltered: filterData(fieldAccessor!)?.where((element) => element.trade == "Y").toList(),
+        datafiltered: filterData(fieldAccessor)
+            ?.where((element) => element.trade == "Y")
+            .toList(),
+        datafilteredfull: datafilteredfull,
         header: state.header,
         fini: state.fini,
         ffin: state.ffin,
@@ -109,6 +121,7 @@ class TradeMarketingBloc
       emit(LoadingTradeMarketingState(
         data: [],
         datafiltered: [],
+        datafilteredfull: [],
         header: "Fecha",
         //convertir a datetime
         fini: DateTime(
@@ -131,7 +144,9 @@ class TradeMarketingBloc
       if (value != null && event.fini.isNotEmpty && event.ffin.isNotEmpty) {
         emit(SuccessTradeMarketingState(
           data: value.data,
-          datafiltered: value.data!.where((element) => element.trade == "Y").toList(),
+          datafiltered:
+              value.data!.where((element) => element.trade == "Y").toList(),
+          datafilteredfull: value.data,
           header: "Fecha",
           fini: DateTime(
               int.parse(finiYear), int.parse(finiMonth), int.parse(finiDay)),
@@ -142,6 +157,7 @@ class TradeMarketingBloc
         emit(ErrorTradeMarketingState(
           data: [],
           datafiltered: [],
+          datafilteredfull: [],
           header: "Fecha",
           fini: DateTime(
               int.parse(finiYear), int.parse(finiMonth), int.parse(finiDay)),
@@ -154,6 +170,7 @@ class TradeMarketingBloc
       emit(SuccessTradeMarketingState(
           data: state.data,
           datafiltered: state.datafiltered,
+          datafilteredfull: state.datafilteredfull,
           header: event.header,
           fini: state.fini,
           ffin: state.ffin));
@@ -196,21 +213,25 @@ class FilterByDateTradeMarketing extends TradeMarketingEvent {
 class TradeMarketingState {
   List<TradeMarketingHeader>? data;
   List<TradeMarketingHeader>? datafiltered;
+  List<TradeMarketingHeader>? datafilteredfull;
   DateTime fini;
   DateTime ffin;
   String? header;
-  TradeMarketingState(
-      {required this.data,
-      required this.datafiltered,
-      this.header,
-      required this.fini,
-      required this.ffin});
+  TradeMarketingState({
+    required this.data,
+    required this.datafiltered,
+    required this.datafilteredfull,
+    required this.header,
+    required this.fini,
+    required this.ffin,
+  });
 }
 
 class InitialTradeMarketingState extends TradeMarketingState {
   InitialTradeMarketingState(
       {required super.data,
       required super.datafiltered,
+      required super.datafilteredfull,
       required super.header,
       required super.fini,
       required super.ffin});
@@ -220,6 +241,7 @@ class LoadingTradeMarketingState extends TradeMarketingState {
   LoadingTradeMarketingState(
       {required super.data,
       required super.datafiltered,
+      required super.datafilteredfull,
       required super.header,
       required super.fini,
       required super.ffin});
@@ -229,6 +251,7 @@ class SuccessTradeMarketingState extends TradeMarketingState {
   SuccessTradeMarketingState(
       {required super.data,
       required super.datafiltered,
+      required super.datafilteredfull,
       required super.header,
       required super.fini,
       required super.ffin});
@@ -238,6 +261,7 @@ class ErrorTradeMarketingState extends TradeMarketingState {
   ErrorTradeMarketingState(
       {required super.data,
       required super.datafiltered,
+      required super.datafilteredfull,
       required super.header,
       required super.fini,
       required super.ffin});

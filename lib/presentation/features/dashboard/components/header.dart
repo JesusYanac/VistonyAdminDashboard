@@ -9,7 +9,10 @@ import '../bloc/navigation_bloc.dart';
 import '../trade_marketing/bloc/trade_marketing_bloc.dart';
 
 class Header extends StatefulWidget {
-  const Header({super.key});
+  const Header({super.key,
+  required this.searchController
+  });
+  final TextEditingController searchController;
 
   @override
   State<Header> createState() => _HeaderState();
@@ -34,7 +37,7 @@ class _HeaderState extends State<Header> {
               ),
             if (!Responsive.isMobile(context))
               Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
-            if (state.isSearchBoxVisible) const Expanded(child: SearchField()),
+            if (state.isSearchBoxVisible) Expanded(child: SearchField(searchController: widget.searchController,)),
             if (!state.isSearchBoxVisible) const Spacer(),
               const ProfileCard()
           ],
@@ -117,27 +120,42 @@ class ProfileCard extends StatelessWidget {
 class SearchField extends StatefulWidget {
   const SearchField({
     super.key,
+    required this.searchController
+
   });
+
+  final TextEditingController searchController;
 
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final TextEditingController _searchController = TextEditingController();
   final TextEditingController fini = TextEditingController();
   final TextEditingController ffin = TextEditingController();
+
+
   @override
   void initState() {
     fini.text = "${DateTime.now().toLocal()}".split(' ')[0];
     ffin.text = "${DateTime.now().toLocal()}".split(' ')[0];
     super.initState();
   }
-
+  /*
+  @override
+  void didUpdateWidget(covariant SearchField oldWidget) {
+    if(widget.searchText != _searchController.text) {
+      setState(() {
+        _searchController.text = widget.searchText;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+*/
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _searchController,
+      controller: widget.searchController,
       decoration: InputDecoration(
         hintText: "Buscar...",
         hintStyle: Theme.of(context).textTheme.bodyMedium,
@@ -152,6 +170,7 @@ class _SearchFieldState extends State<SearchField> {
             _showDateRangeDialog(context, (fini, ffin) {
               BlocProvider.of<TradeMarketingBloc>(context)
                   .filterByDateTradeMarketing(fini,ffin);
+              widget.searchController.clear();
             });
           },
           child: Container(
