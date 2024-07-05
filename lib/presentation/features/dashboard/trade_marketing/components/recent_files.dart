@@ -189,7 +189,7 @@ class _RecentFilesState extends State<RecentFiles> {
       ),
       child: ListView.builder(
         itemCount: data.length,
-        physics: const NeverScrollableScrollPhysics(),
+        //physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return recentFileDataRow(data[index], "${index + 1}");
         },
@@ -368,10 +368,12 @@ class _TableHeaderCellState extends State<TableHeaderCell> {
 
   Widget _buildHeaderContainer(BuildContext context) {
     double width;
-    if (widget.header == "N°" || widget.header == "DOC") {
+    if (widget.header == "N°") {
       width = 40;
+    } else if (widget.header == "DOC") {
+      width = 60;
     } else if (widget.header == "Sucursal") {
-      width = 80;
+      width = 100;
     } else if (widget.header == "Fecha") {
       width = 80;
     } else {
@@ -382,6 +384,7 @@ class _TableHeaderCellState extends State<TableHeaderCell> {
 
     return Container(
       width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: _buildHeaderText(context),
     );
   }
