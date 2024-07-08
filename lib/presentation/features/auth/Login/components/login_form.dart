@@ -9,19 +9,34 @@ import '../../../dashboard/bloc/navigation_bloc.dart';
 import '../../../dashboard/main_screen.dart';
 import '../../../dashboard/trade_marketing/bloc/trade_marketing_bloc.dart';
 import '../../Signup/signup_screen.dart';
+import '../../bloc/auth_bloc/bloc.dart';
 
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({
     super.key,
   });
 
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  late final TextEditingController _email;
+  late final TextEditingController _password;
+  @override
+  void initState() {
+    _password = TextEditingController();
+    _email = TextEditingController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Form(
       child: Column(
         children: [
           TextFormField(
+            controller: _email,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
@@ -33,10 +48,12 @@ class LoginForm extends StatelessWidget {
                 child: Icon(Icons.person),
               ),
             ),
+            style: const TextStyle(color: kPrimaryColor),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
+              controller: _password,
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
@@ -47,44 +64,59 @@ class LoginForm extends StatelessWidget {
                   child: Icon(Icons.lock),
                 ),
               ),
+              style: const TextStyle(color: kPrimaryColor),
             ),
           ),
           const SizedBox(height: defaultPadding),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return MultiProvider(
-                      providers: [
-                        ChangeNotifierProvider(
-                          create: (context) => MenuAppController(),
-                        ),
-                      ],
-                      child: MultiBlocProvider(
+          BlocListener<AuthBloc, AuthBlocState>(
+            listener: (context, state) {
+              if (state is SuccessAuthBlocState) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return MultiProvider(
                         providers: [
-                          BlocProvider(
-                            create: (context) => NavigationBloc(),
+                          ChangeNotifierProvider(
+                            create: (context) => MenuAppController(),
                           ),
-                          BlocProvider(
-                            create: (context){
-                              final bloc = TradeMarketingBloc();
-                              bloc.reloadTradeMarketing();
-                              return bloc;
-                            },
-                          )
                         ],
-                        child: const MainScreen(),
-                      ),
-                    );
-                  },
-                ),
-              );
+                        child: MultiBlocProvider(
+                          providers: [
+                            BlocProvider(
+                              create: (context) => NavigationBloc(),
+                            ),
+                            BlocProvider(
+                              create: (context) {
+                                final bloc = TradeMarketingBloc();
+                                bloc.reloadTradeMarketing();
+                                return bloc;
+                              },
+                            )
+                          ],
+                          child: const MainScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+              if (state is ErrorAuthBlocState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Login Error"),
+                  ),
+                );
+              }
             },
-            child: Text(
-              "Inicia Sesión".toUpperCase(),
-              style: const TextStyle(color: Colors.white),
+            child: ElevatedButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).triggerAuthLogin(_email.text, _password.text);
+              },
+              child: Text(
+                "Inicia Sesión".toUpperCase(),
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ),
           const SizedBox(height: defaultPadding),

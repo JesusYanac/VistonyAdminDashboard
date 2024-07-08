@@ -1,14 +1,14 @@
 import '../../data/model/trade_marketing_model.dart';
 import '../../data/repositories/repository_trade_marketing_impl.dart';
+import '../repositories/repository_trade_marketing.dart';
 
 class UseCaseTradeMarketing {
-  Future<TradeMarketingEntity?> getTradeMarketing(String dateini, String datefin)async{
-
-    //logica
-    return await RepositoryTradeMarketingImpl().getTradeMarketing(dateini, datefin);
+  RepositoryTradeMarketing repositoryTradeMarketing = RepositoryTradeMarketingImpl();
+  Future<TradeMarketingEntity?> getTradeMarketing(String dateini, String datefin) async {
+    return await repositoryTradeMarketing.getTradeMarketing(dateini, datefin);
   }
 
-  Future<TradeMarketingPageModel?> getFormTradeMarketing(String docEntry) async{
-    return await RepositoryTradeMarketingImpl().getFormTradeMarketing(docEntry);
+  Future<TradeMarketingPageModel?> getFormTradeMarketing(String docEntry) async {
+    return await repositoryTradeMarketing.getFormTradeMarketing(docEntry);
   }
 }

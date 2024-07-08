@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants.dart';
 import '../../Login/login_screen.dart';
 import '../../Signup/signup_screen.dart';
+import '../../bloc/auth_bloc/bloc.dart';
 
 class LoginAndSignupBtn extends StatelessWidget {
   const LoginAndSignupBtn({
@@ -31,7 +33,10 @@ class LoginAndSignupBtn extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return const LoginScreen();
+                  return BlocProvider(
+                    create: (context) => AuthBloc(),
+                    child: const LoginScreen(),
+                  );
                 },
               ),
             );

@@ -65,28 +65,7 @@ class MyApp extends StatelessWidget {
         Locale('es', 'ES'),
       ],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => MenuAppController(),
-          ),
-        ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => NavigationBloc(),
-            ),
-            BlocProvider(
-              create: (context){
-                final bloc = TradeMarketingBloc();
-                bloc.reloadTradeMarketing();
-                return bloc;
-              },
-            )
-          ],
-          child: const MainScreen(),
-        ),
-      ),
+      home: const WelcomeScreen(),
     );
   }
 }
