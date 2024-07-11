@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vistony_admin_dashboard/presentation/core/controllers/responsive.dart';
 import '../../../../core/constants.dart';
 import '../../Login/login_screen.dart';
 import '../../Signup/signup_screen.dart';
 import '../../bloc/auth_bloc/bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class LoginAndSignupBtn extends StatelessWidget {
   const LoginAndSignupBtn({
@@ -67,8 +70,25 @@ class LoginAndSignupBtn extends StatelessWidget {
             style: const TextStyle(color: Colors.black),
           ),
         ),
+        if (!Responsive.isMobile(context))
+          Row(
+            children: [
+              InkWell( onTap: solicitarAcceso, child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("Solicitar Acceso", style: TextStyle(color: primaryColor),),
+              ))
+            ],
+          ),
       ],
     );
   }
 
+  void solicitarAcceso() async {
+    const url = 'https://cors-anywhere.herokuapp.com/http://190.12.79.135:8060/get/api/TradeMarketing/Get?DateStart=20240704&DateFinish=20240704';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'No se puede lanzar $url';
+    }
+  }
 }
